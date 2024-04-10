@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Requests</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.33/dist/sweetalert2.all.min.js"></script>
+</head>
+
+    <style>
+        .lato-light {
+            font-family: 'Arial', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        .navbar {
+            padding-bottom: 0;
+        }
+        
+        ul {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            padding-bottom: 0%;
+        }
+        
+        .navbar {
+            padding-bottom: 0px;
+        }
+        
+        .nav {
+            justify-content: center;
+        }
+        
+        .navbar-brand {
+            text-decoration: none;
+            color: black;
+            
+            position: relative;
+            transition: all 0.3s ease;
+            padding-bottom: 0%;
+        
+        }
+        
+        .navbar-brand:hover {
+            color: #4c1b9a;
+            padding-bottom: 0%;
+        }
+        
+        .navbar-brand::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #4c1b9a;
+            border-radius: 5px;
+            transform: scaleX(0);
+            transition: all 0.6s ease;
+            bottom: 0;
+            left: 0;
+            padding-bottom: 0px;
+        }
+        
+        .navbar-brand:hover::before {
+            transform: scaleX(1);
+            padding-bottom: 0%;
+        }
+        
+        #Logout {
+            background: rgb(68, 43, 206);
+            padding-left: 13px;
+            font-size: 20px;
+            color: white;
+            text-align: end;
+        }
+        
+        #Logout:hover {
+            background: rgb(230, 63, 63);
+            padding-left: 13px;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .navbar {
+        
+            margin-bottom: 0px;
+            padding-bottom: 0%;
+            justify-content: center;
+        }
+        
+        .s {
+            text-decoration: none;
+        }
+        
+        .rainbow-text {
+        
+            background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* For Safari */
+            background-size: 400%;
+            /* Adjust based on text length */
+            animation: rainbow-animation 5s infinite linear;
+            /* Adjust duration as needed */
+        }
+        
+        @keyframes rainbow-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+        
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        #Editreservation {
+            color: #4c1b9a;
+            text-decoration: none;
+            cursor: not-allowed;
+        }
+        @media (max-width: 767px) {
+            .navbar-brand {
+              font-size: 17px; /* Decrease font size */
+            }
+          }
+          
+          /* For medium devices (e.g., tablets) */
+          @media (min-width: 768px) and (max-width: 991px) {
+            .navbar-brand {
+              font-size: 20px; /* Adjust font size */
+            }
+          }
+          
+          /* For large devices (e.g., desktops) */
+          @media (min-width: 992px) {
+            .navbar-brand {
+              font-size: 28px; /* Default font size */
+            }
+          }
+          nav{
+            background: linear-gradient(to right, #ffffff,#9DA2AE);
+          }
+          @media (max-width: 767px) {
+            .navbar-brand {
+                font-size: 17px;
+                /* Decrease font size */
+            }
+        }
+        
+        /* For medium devices (e.g., tablets) */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .navbar-brand {
+                font-size: 20px;
+                /* Adjust font size */
+            }
+        }
+        
+        /* For large devices (e.g., desktops) */
+        @media (min-width: 992px) {
+            .navbar-brand {
+                font-size: 28px;
+                /* Default font size */
+            }
+        }
+          nav{
+            background: linear-gradient(to right, #ffffff,#9DA2AE);
+          }
+          #History{
+            text-align: center;
+          }
+    </style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 sticky-top">
+        <ul>
+            <li>
+                <h1 class="rainbow-text">Roommeetee</h1>
+            </li>
+            <li><a href="/lecturer/room-lists" class="navbar-brand float-end" id="Roomlist">Room Lists</a></li>
+            <li><a href="/lecturer/booking-requests" class="navbar-brand  float-end " id="Editreservation">Booking Requests</a></li>
+            <li><a href="/lecturer/dashboard" class="navbar-brand float-end" id="Dashboard">Dashboard</a></li>
+            <li><a href="/lecturer/history" class="navbar-brand float-end" id="History">History</a></li>
+            <li><a href="/logout" class=" navbar-brand float-end">Logout</a></li>
+            <li><p><%= user.email %></p></li>
+        </ul>
+    </nav>
+    <table class="table table-striped  w-100 " id="Table">
+        <thead>
+            <tr>
+                <th class="text-center bg-dark text-white fs-4" id="">Picture</th>
+                <th class="text-start bg-dark text-white fs-4" id="">Room Name</th>
+                <th class="text-center bg-dark text-white fs-4" id="">Time Slot</th>
+                <th class="tex-start bg-dark text-white fs-4" id="">Status</th>
+                <th class="tex-start bg-dark text-white fs-4" id="">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% bookings.forEach(booking => { %>
+            <tr>
+                <td class="text-white mx-4 text-center" id="Table2">
+                    <div class="text-start text-dark">
+                        <img src="/img/<%= booking.image_path %>" alt=""  width="350px" height="200px" >
+                    </div>
+                </td>
+                <td class="text-white mx-4 text-center" id="Table2">
+                    <div class="text-start text-dark"> 
+                        <h3><%= booking.room_name %></h3>
+                    </div>
+                </td>
+                
+                <td class="text-white mx-4 text-center" id="Table2">
+                    <div class="text-start text-dark"> 
+                        <h3><%= booking.start_time %> - <%= booking.end_time %></h3>
+                    </div>
+                </td>
+                
+                <td class="text-white mx-4 text-center" id="Table2">
+                    <div class="text-start text-dark"> 
+                        <h3 class="text-warning"><%= booking.status %> </h3>
+                    </div>
+                </td>
+                <td class="text-white mx-4 text-center" id="Table2">
+                    <div class="text-start text-dark"> 
+                        <% if (booking.status === 'pending') { %>
+                            <form action="/lecturer/approve-booking" method="POST">
+                                <input type="hidden" name="bookingId" value="<%= booking.id %>">
+                                <button type="submit" name="action" value="approve" class="btn btn-success m-1">Approve</button>
+                            </form>
+                            <form action="/lecturer/reject-booking" method="POST">
+                                <input type="hidden" name="bookingId" value="<%= booking.id %>">
+                                <button type="submit" name="action" value="reject" class="btn btn-danger m-1"><label class="px-2">Reject</label></button>
+                            </form>
+                        <% } else { %>
+                            <!-- Display a message or alternative action for approved/rejected bookings -->
+                            <%= booking.status %>
+                        <% } %>
+                    </div>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <!-- JavaScript -->
+    <script>
+        var rooms = [
+            
+            {
+                id: 1,
+                name: 'Meeting room1',
+                time: '08.00-10.00',
+                Pending:'mark',
+                Objective:'Project'
+            },
+            {
+                id: 2,
+                name: 'Meeting room1',
+                time: '15.00-17.00',
+                Pending:'Jane',
+                Objective:'Project'
+            },
+            {
+                id: 3,
+                name: 'Meeting room2',
+                time: '08.00-10.00',
+                Pending:'Jade',
+                Objective:'Project'
+            },
+            {
+                id: 4,
+                name: 'Meeting room2',
+                time: '15.00-17.00',
+                Pending:'Kim',
+                Objective:'Project'
+            },
+            {
+                id: 5,
+                name: 'Meeting room3',
+                time: '08.00-10.00',
+                Pending:'Tom',
+                Objective:'Project'
+            },
+            {
+                id: 6,
+                name: 'Meeting room3',
+                time: '15.00-17.00',
+                Pending:'Pao',
+                Objective:'Project'
+            },
+            {
+                id:7 ,
+                name: 'Meeting room3',
+                time: '08.00-10.00',
+                Pending:'Nit',
+                Objective:'Project'
+            },
+            {
+                id: 8,
+                name: 'Meeting room4',
+                time: '08.00-10.00',
+                Pending:'boa',
+                Objective:'Project'
+            },
+            {
+                id: 9,
+                name: 'Meeting room4',
+                time: '08.00-10.00',
+                Pending:'Pat',
+                Objective:'Project'
+            },
+            {
+                id: 10,
+                name: 'Meeting room5',
+                time: '08.00-10.00',
+                Pending:'Ploy',
+                Objective:'Project'
+            },
+          
+           
+        ];
+
+        var mode = "add";
+        var editID = null; // Variable to store the index of the room being edited
+        const modalAddEdit = new bootstrap.Modal(document.querySelector('#modalAddEdit'));
+
+        function readRooms() {
+    let output = '<thead class="table-dark"><tr><th>Name</th><th>Time Slot</th><th>Booking Name</th> <th>Booking Objective</th> <th>Action</th></tr></thead><tbody>';
+    rooms.forEach(function (room) {
+        output += '<tr>';
+        output += `<td>${room.name}</td>`;
+        output += `<td>${room.time}</td>`;
+        output += `<td>${room.Pending}</td>`;
+        output += `<td>${room.Objective}</td>`;
+        if (room.disabled) {
+            output += `<td><button class="btn btn-success btnEnable me-2" id=${room.id}>Enable</button>`;
+        } else {
+            output += `<td><button class="btn btn-primary btnApprove me-2" id=${room.id}>Approve</button>`;
+            output += `<button class="btn btn-danger btnDisapprove me-2" id=${room.id}>Disapprove</button>`;
+        }
+      //  output += `<button class="btn btn-primary btnEdit me-2" id=${room.id}>Edit</button></td>`;
+        output += '</tr>';
+    });
+    output += '</tbody>';
+
+    document.querySelector('table').innerHTML = output;
+}
+
+        function disableRoom(id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Sure to disable this room?',
+                showCancelButton: true,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const roomIndex = rooms.findIndex(room => room.id == id);
+                    if (roomIndex !== -1) {
+                        rooms[roomIndex].disabled = true; // Set the room as disabled
+                        readRooms();
+                    }
+                }
+            });
+        }
+
+        function enableRoom(id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Sure to enable this room?',
+                showCancelButton: true,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const roomIndex = rooms.findIndex(room => room.id == id);
+                    if (roomIndex !== -1) {
+                        rooms[roomIndex].disabled = false; // Set the room as enabled
+                        readRooms();
+                    }
+                }
+            });
+        }
+
+        function approveRoom(id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Are you sure you want to approve this room?',
+                showCancelButton: true,
+                confirmButtonText: 'Approve'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "approve Complete",
+                        showCancelButton: false,
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (roomIndex !== -1) {
+                        rooms.splice(roomIndex, 1); // Delete the room from the array
+                        readRooms();
+                    }
+                    });
+                    const roomIndex = rooms.findIndex(room => room.id == id);
+                    
+                }
+            });
+        }
+
+        function disapproveRoom(id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Are you sure you want to disapprove this room?',
+                showCancelButton: true,
+                confirmButtonText: 'Disapprove'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Disapprove Complete",
+                        showCancelButton: false,
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (roomIndex !== -1) {
+                        rooms.splice(roomIndex, 1); // Delete the room from the array
+                        readRooms();
+                    }
+                    });
+                    const roomIndex = rooms.findIndex(room => room.id == id);
+                    
+                }
+            });
+        }
+
+        function addRoom() {
+            const name = document.querySelector('#txtName').value;
+            const timeSlot = document.querySelector('#txtTimeSlot').value;
+            const lastID = rooms.length > 0 ? rooms[rooms.length - 1].id : 0;
+            const newRoom = { id: lastID + 1, name: name, time: timeSlot, disabled: false }; // New rooms are initially enabled
+            rooms.push(newRoom);
+            modalAddEdit.hide();
+            readRooms();
+        }
+
+        function editRoom(id) {
+            const roomIndex = rooms.findIndex(room => room.id === id);
+            const room = rooms[roomIndex];
+            room.name = document.querySelector('#txtName').value;
+            room.time = document.querySelector('#txtTimeSlot').value;
+            modalAddEdit.hide();
+            readRooms();
+        }
+
+        readRooms();
+
+        // document.querySelector('#btnAdd').onclick = function () {
+        //     document.querySelector('#txtName').value = "";
+        //     document.querySelector('#txtTimeSlot').value = "";
+        //     modalAddEdit.show();
+        //     document.querySelector('#modalTitleId').innerText = "Add Room";
+        //     mode = "add";
+        // }
+
+        document.querySelector('#btnAddEdit').onclick = function () {
+            if (mode == "add") {
+                addRoom();
+            } else {
+                editRoom(editID);
+            }
+        }
+
+        document.querySelector('table').onclick = function (e) {
+            if (e.target.classList.contains("btnDisable")) {
+                disableRoom(e.target.id);
+            } else if (e.target.classList.contains("btnEnable")) {
+                enableRoom(e.target.id);
+            } else if (e.target.classList.contains("btnApprove")) {
+                approveRoom(e.target.id);
+            } else if (e.target.classList.contains("btnDisapprove")) {
+                disapproveRoom(e.target.id);
+            } else if (e.target.classList.contains("btnEdit")) {
+                editID = parseInt(e.target.id);
+                const roomIndex = rooms.findIndex(room => room.id === editID);
+                const room = rooms[roomIndex];
+                document.querySelector('#txtName').value = room.name;
+                document.querySelector('#txtTimeSlot').value = room.time;
+                modalAddEdit.show();
+                document.querySelector('#modalTitleId').innerText = "Edit Room " + editID;
+                mode = "edit";
+            }
+        }
+
+        document.querySelector('#Logout').onclick = function () {
+            Swal.fire({
+                title: "Do You Want To Log-Out",
+                showCancelButton: true,
+                confirmButtonText: "Log-Out",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "Login.html"
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>

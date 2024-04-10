@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.33/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="Reservation-student.css">
+</head>
+
+<style>
+    #button:hover {
+        background: rgb(184, 74, 74);
+    }
+    
+    ul {
+        display: flex;
+        gap: 3rem;
+        list-style: none;
+        padding-bottom: 0%;
+    }
+    
+    
+    .navbar-brand {
+        text-decoration: none;
+        color: black;
+        
+        position: relative;
+        transition: all 0.3s ease;
+        padding-bottom: 0%;
+        margin-bottom: 0;
+    
+    
+    }
+    
+    .navbar {
+    
+        margin-bottom: 0px;
+        padding-bottom: 0%;
+        justify-content: center;
+    }
+    
+    .navbar-brand:hover {
+        color: #4c1b9a;
+        padding-bottom: 0%;
+    }
+    
+    .navbar-brand::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: #4c1b9a;
+        border-radius: 5px;
+        transform: scaleX(0);
+        transition: all 0.6s ease;
+        bottom: 0;
+        left: 0;
+        padding-bottom: 0px;
+    }
+    
+    .navbar-brand:hover::before {
+        transform: scaleX(1);
+        padding-bottom: 0%;
+    }
+    
+    
+    
+    #Logout {
+      
+        padding-left: 13px;
+        font-size: 20px;
+        color: white;
+        text-align: end;
+    }
+    
+    
+    
+    #main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+        width: 100%;
+        padding: 0 10px;
+        background: url("https://mir-s3-cdn-cf.behance.net/project_modules/fs/832c3177888323.5c94a80a34d3a.jpg?fbclid=IwAR241rjdvw8jahX017nlfpyhzIE443pntp4UFM8ervlbkFh8RDQgK-1I-nk_aem_Aa2DC5j-eYPNTznuGbwr4E1T9tr6tJTvZqsNIn9F3q91fB8S37Lzvo34PBJcFkmo47IaVXoWeluwVy00QYoTzhxh");
+        background-position: center;
+        background-size: cover;
+        color: white;
+    }
+    
+    .lato-light {
+        font-family: "Lato", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+    
+    .wrapper {
+        width: 400px;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        height: fit-content;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(3px);
+    }
+    
+    
+    
+    .rainbow-text {
+        background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    
+    
+    
+    #Reservation {
+        color: #4c1b9a;
+        
+        cursor: not-allowed;
+    }
+    @media (max-width: 767px) {
+      .navbar-brand {
+        font-size: 17px; /* Decrease font size */
+      }
+    }
+    
+    /* For medium devices (e.g., tablets) */
+    @media (min-width: 768px) and (max-width: 991px) {
+      .navbar-brand {
+        font-size: 20px; /* Adjust font size */
+      }
+    }
+    
+    /* For large devices (e.g., desktops) */
+    @media (min-width: 992px) {
+      .navbar-brand {
+        font-size: 28px; /* Default font size */
+      }
+    }
+    nav{
+      background: linear-gradient(to right, #ffffff,#9DA2AE);
+    }
+    @media (max-width: 767px) {
+      .navbar-brand {
+          font-size: 17px;
+          /* Decrease font size */
+      }
+    }
+    
+    /* For medium devices (e.g., tablets) */
+    @media (min-width: 768px) and (max-width: 991px) {
+      .navbar-brand {
+          font-size: 20px;
+          /* Adjust font size */
+      }
+    }
+    
+    /* For large devices (e.g., desktops) */
+    @media (min-width: 992px) {
+      .navbar-brand {
+          font-size: 23px;
+          /* Default font size */
+      }
+    }
+      nav{
+        background: linear-gradient(to right, #ffffff,#9DA2AE);
+      }
+      #s{
+        text-decoration: none;
+      }
+</style>
+
+<body>
+    <!------------------Menu bar---------------------->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 sticky-top text">
+
+        <ul>
+            <li><a href="Home2-student.html"  id="s" >
+                    <h1 class="rainbow-text " >Roommeetee</h1>
+                </a>
+            </li>
+            <li><a href="#" class="navbar-brand float-end" id="Home">Home</a></li>
+            <li><a href="#" class="navbar-brand  float-end " id="Roomlist">Room list</a></li>
+            <li><a href="#" class="navbar-brand float-end" id="Reservation">Reservation</a></li>
+            <li><a href="#" class="navbar-brand float-end" id="CheckmyRequest">Check The Request</a></li>
+            <li><a href="#" class="navbar-brand float-end" id="History">History</a></li>
+            <li><a href="/logout"> <button class="btn btn-danger">LogOut</button></a></li>
+        </ul>
+
+    </nav>
+    <div class="">
+                              <!--------------Reservation Form----------------------->
+        <div id="main">
+            <div class="wrapper">
+                <h1>Reservation Form</h1>
+                <form action="/booking" method="post">
+                <input type="hidden" name="roomId" value="<%= roomId %>">
+                <input type="hidden" name="slotId" value="<%= slotId %>">
+                <input type="hidden" name="userId" value="<%= userId %>">
+                <img src="/img/<%= roomImage %>"  alt="" id="roomImage" width="100%"  height="200px" > <!-- Image tag to display room picture -->
+                <p><strong>Room Name:</strong> <%= roomName %></p>
+                <p><strong>Date:</strong> <span id="currentDate"></span></p>
+                <p><strong>Time:</strong> <span id="currentTime"></span></p>
+                <p><strong>Time Slot:</strong>  <%= startTime %> - <%= endTime %> </p>
+                <p><strong>Objective:</strong></p>
+                <textarea name="objective" id="objectiveInput" class="form-control" cols="40" rows="3" required></textarea>
+                <div>
+                    <button type="submit" class="btn btn-primary mt-3" id="submitReservation">Submit</button>
+                    <button type="submit" class="btn btn-danger mt-3 mx-4"> <a href="/index" class="text-white">Cancel</a> </button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <script>
+
+        // Function to format the date with leadin zeros if needed
+        function formatTime(time) {
+            return time < 10 ? "0" + time : time;
+        }
+
+        // Update the date and time every second
+        setInterval(function() {
+            // Get the current date and time
+            const now = new Date();
+
+            // Format date (MM/DD/YYYY)
+            const formattedDate = (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear();
+
+            // Format time (HH:MM:SS)
+            const formattedTime = formatTime(now.getHours()) + ':' + formatTime(now.getMinutes()) + ':' + formatTime(now.getSeconds());
+
+            // Update the HTML content with the current data and time
+            document.getElementById('currentDate').textContent = formattedDate;
+            document.getElementById('currentTime').textContent = formattedTime;
+        }, 1000); //Update every second
+
+        //----------------------set text of form automatic-------------------------------
+        window.onload = function () {
+
+            const selectedRoom = JSON.parse(localStorage.getItem("selectedRoom"));
+            const date = localStorage.getItem("date");
+            const timeSlot = localStorage.getItem("timeSlot");
+
+            document.getElementById('roomName').textContent = selectedRoom.name;
+            document.getElementById('roomSize').textContent = selectedRoom.size;
+            document.getElementById('date').textContent = date;
+            document.getElementById('timeSlot').textContent = timeSlot;
+
+
+            document.getElementById('roomImage').src = selectedRoom.picture;
+        };
+        
+        //-----------------------------when click Home menu----------------------------------
+        document.querySelector('#Home').onclick = function () {
+            Swal.fire({
+                title: "Do you  Sure for Cancel  Booking?",
+                showDenyButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `No`
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Cancel Complete",
+                        showCancelButton: false,
+                        confirmButtonText: "Go Home",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "Home2-student.html";
+                        }
+                    });
+                }
+            });
+          
+        };
+         
+        //--------------------------- when click roomlist---------------------------------------
+        document.querySelector('#Roomlist').onclick = function () {
+            Swal.fire({
+                title: "Do you  Sure for Cancel  Booking?",
+                showDenyButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `No`
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Cancel Complete",
+                        showCancelButton: false,
+                        confirmButtonText: "Go Booking Again",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "Roomlist-student.html";
+                        }
+                    });
+                }
+            });
+        }
+        
+        //--------------------------- when click Check request Menu---------------------------------------
+        document.querySelector('#CheckmyRequest').onclick = function () {
+            Swal.fire({
+                title: "Your Form is not Save",
+                showCancelButton: true,
+                confirmButtonText: "Ok",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "Checkrequest-student.html";
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        }
+         
+        //--------------------------- when click History Menu---------------------------------------
+        document.querySelector('#History').onclick = function () {
+
+            window.location.href = "History-student.html"
+        } 
+    
+    </script>
+</body>
+
+</html>

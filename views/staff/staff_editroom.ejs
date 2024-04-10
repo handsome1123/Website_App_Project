@@ -1,0 +1,45 @@
+<!-- edit-room.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Room</title>
+</head>
+<body>
+    <h1>Edit Room</h1>
+    <h2>Room Details</h2>
+    <!-- Inside your edit-room.ejs -->
+    <form method="post" action="/staff/edit-room/<%= room.room_id %>" enctype="multipart/form-data">
+        <!-- Room Name and Image Input Fields -->
+        <label for="roomName">Room Name:</label>
+        <input type="text" id="roomName" name="roomName" value="<%= room.room_name %>" required><br><br>
+        
+        <label for="image">Current Image:</label>
+        <img src="/img/<%= room.image_path %>" alt="Room Image" style="max-width: 200px;"><br>
+        <label for="image">New Image (optional):</label>
+        <input type="file" id="image" name="image" accept="image/*"><br><br>
+
+        <!-- Time Slots -->
+        <h2>Time Slots</h2>
+        <% timeSlots.forEach((slot, index) => { %>
+            <div>
+                <label>Start Time:</label>
+                <input type="time" name="timeSlots[<%= index %>][startTime]" value="<%= slot.start_time %>" required>
+
+                <label>End Time:</label>
+                <input type="time" name="timeSlots[<%= index %>][endTime]" value="<%= slot.end_time %>" required>
+
+                <label>Status:</label>
+                <select name="timeSlots[<%= index %>][status]" required>
+                    <option value="free" <%= slot.status === 'free' ? 'selected' : '' %>>Free</option>
+                    <option value="disabled" <%= slot.status === 'disabled' ? 'selected' : '' %>>Disabled</option>
+                </select>
+            </div>
+        <% }); %>
+
+        <input type="submit" value="Update">
+    </form>
+
+</body>
+</html>

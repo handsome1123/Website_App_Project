@@ -1,0 +1,287 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Rooms</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <script src="../../js/sweetalert2.all.min.js"></script>
+    <!-- Add any other necessary stylesheets -->
+</head>
+
+<style>
+    .lato-light {
+        font-family: 'Arial', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+    
+    .navbar {
+        padding-bottom: 0;
+    }
+    
+    ul {
+        display: flex;
+        gap: 3rem;
+        list-style: none;
+        padding-bottom: 0%;
+    }
+    
+    .navbar {
+        padding-bottom: 0px;
+    }
+    
+    .nav {
+        justify-content: center;
+    }
+    
+    .navbar-brand {
+        text-decoration: none;
+        color: black;
+        
+        position: relative;
+        transition: all 0.3s ease;
+        padding-bottom: 0%;
+    
+    }
+    
+    .navbar-brand:hover {
+        color: #4c1b9a;
+        padding-bottom: 0%;
+    }
+    
+    .navbar-brand::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: #4c1b9a;
+        border-radius: 5px;
+        transform: scaleX(0);
+        transition: all 0.6s ease;
+        bottom: 0;
+        left: 0;
+        padding-bottom: 0px;
+    }
+    
+    .navbar-brand:hover::before {
+        transform: scaleX(1);
+        padding-bottom: 0%;
+    }
+    
+    #Logout {
+      
+        padding-left: 13px;
+        font-size: 20px;
+        color: white;
+        text-align: end;
+    }
+    
+    
+    
+    .navbar {
+    
+        margin-bottom: 0px;
+        padding-bottom: 0%;
+        justify-content: center;
+    }
+    
+    .s {
+        text-decoration: none;
+    }
+    
+    .rainbow-text {
+        background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    
+    #Roomlist {
+        color: #4c1b9a;
+        
+        cursor: not-allowed;
+        font-weight: 500 ;
+    }
+    @media (max-width: 767px) {
+        .navbar-brand {
+          font-size: 17px; /* Decrease font size */
+        }
+      }
+      
+      /* For medium devices (e.g., tablets) */
+      @media (min-width: 768px) and (max-width: 991px) {
+        .navbar-brand {
+          font-size: 20px; /* Adjust font size */
+        }
+      }
+      
+      /* For large devices (e.g., desktops) */
+      @media (min-width: 992px) {
+        .navbar-brand {
+          font-size: 28px; /* Default font size */
+        }
+      }
+      nav{
+        background: linear-gradient(to right, #ffffff,#9DA2AE);
+      }
+      @media (max-width: 767px) {
+        .navbar-brand {
+            font-size: 17px;
+            /* Decrease font size */
+        }
+    }
+    
+    /* For medium devices (e.g., tablets) */
+    @media (min-width: 768px) and (max-width: 991px) {
+        .navbar-brand {
+            font-size: 20px;
+            /* Adjust font size */
+        }
+    }
+    
+    /* For large devices (e.g., desktops) */
+    @media (min-width: 992px) {
+        .navbar-brand {
+            font-size: 28px;
+            /* Default font size */
+        }
+    }
+      nav{
+        background: linear-gradient(to right, #ffffff,#9DA2AE);
+      }
+</style>
+
+<body>
+    <!-------------------------Menu Bar------------------------------------>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 sticky-top">
+        <ul>
+            <li>
+                <h1 class="rainbow-text">Roommeetee</h1>
+            </li>
+            <li><a href="/lecturer/room-lists" class="navbar-brand float-end" id="Roomlist">Room Lists</a></li>
+            <li><a href="/lecturer/booking-requests" class="navbar-brand  float-end " id="Editreservation">Booking Requests</a></li>
+            <li><a href="/lecturer/dashboard" class="navbar-brand float-end" id="Dashboard">Dashboard</a></li>
+            <li><a href="/lecturer/history" class="navbar-brand float-end" id="History">History</a></li>
+            <li><a href="/logout" class=" navbar-brand float-end">Logout</a></li>
+            <li><p><%= user.email %></p></li>
+        </ul>
+    </nav>
+    <div class=" ">
+        <table class="table table-striped  w-100 " id="Table">
+            <thead>
+                <tr>
+                    <th class="text-center bg-dark text-white fs-4" id="">Picture</th>
+                    <th class="text-start bg-dark text-white fs-4" id="">Room Name</th>
+                    <th class="text-center bg-dark text-white fs-4" id="">Time Slot</th>
+                    <th class="tex-start bg-dark text-white fs-4" id="">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% rooms.forEach(room => { %>
+                <tr>
+                    <td class="text-dark mx-4 text-center" id="Table1">
+                        <img src="<%= room.image_path %>" alt="" width="350px" height="200px">
+                    </td>
+                    <td class="text-white mx-4 text-center" id="Table2">
+                        <div class="text-start text-dark"> 
+                            <h3><%= room.room_name %></h3>
+                        </div>
+                    </td>
+             
+                    <td class="border-0" id="Table3">
+                        <div class="mt-2">
+                            <% room.timeSlots.forEach(slot => { %>
+                            <p class=" border-2 px-3 py-2"><%= slot.start_time %> - <%= slot.end_time %></p>
+                            <% }); %>
+                        </div>
+                    </td>
+                    <td class="border-0">
+                            <% room.timeSlots.forEach(slot => { %>
+                            <div class="mt-2">
+                                <% if (slot.status === "free") { %> 
+                                    <button class="btn btn-success btn-md px-3 py-2 text-center">
+                                        <a href="/booking/?roomId=<%= room.room_id %>&userId=<%= userId %>&slotId=<%= slot.slot_id %>" class="text-white px-3">
+                                          <%= slot.status %>
+                                        </a>
+                                      </button>
+                                <% } else if (slot.status === 'pending') { %>
+                                    <button class="btn btn-secondary btn-md px-3 py-2 text-center"><%= slot.status %></button>
+                                <% } else if (slot.status === 'reserved') { %>
+                                    <button class="btn btn-warning btn-md px-3 py-2  text-center"><%= slot.status %></button>
+                                <% } else if (slot.status === 'disabled') { %>
+                                    <button class="btn btn-danger btn-md px-3 py-2 text-center"><%= slot.status %></button>
+                                <% } %>
+                            </div>
+                            <% }); %>   
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Call the function to generate room rows when the page loads
+        window.onload = function () {
+            generateRoomRows();
+        };
+        
+        //   -------------when click logout -------------------------
+        document.querySelector('#Logout').onclick = function () {
+            Swal.fire({
+
+                title: "Do you want to Logout",
+                showCancelButton: true,
+                confirmButtonText: "Logout",
+
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = "Home-student.html"
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        };
+
+        //----------when click Home menu--------------------//
+        document.querySelector('#Home').onclick = function () {
+            window.location.href = "Home2-student.html";
+        };
+        
+        //----------when click Check Request menu--------------------//
+        document.querySelector('#CheckmyRequest').onclick = function () {
+
+            window.location.href = "Checkrequest-student.html"
+
+        }
+        
+        //----------when click Reservation menu--------------------//
+        document.querySelector('#Reservation').onclick = function () {
+            Swal.fire({
+                icon: "error",
+                title: "You must choose The Room First",
+                showCancelButton: true,
+                confirmButtonText: "Booking Now",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "roomlist-student.html";
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        }
+
+        //----------when click History menu--------------------//
+        document.querySelector('#History').onclick = function () {
+
+            window.location.href = "History-student.html"
+        } 
+    
+    </script>
+</body>
+
+</html>

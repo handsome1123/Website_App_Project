@@ -1,0 +1,215 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Lists</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="../../js/sweetalert2.all.min.js"></script>
+
+</head>
+
+<style>
+    .lato-light {
+        font-family: 'Arial', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+    
+    .navbar {
+        padding-bottom: 0;
+    }
+    
+    ul {
+        display: flex;
+        gap: 4rem;
+        list-style: none;
+        padding-bottom: 0%;
+    }
+    
+    .navbar {
+        padding-bottom: 0px;
+    }
+    
+    .nav {
+        justify-content: center;
+    }
+    
+    .navbar-brand {
+        text-decoration: none;
+        color: black;
+        
+        position: relative;
+        transition: all 0.3s ease;
+        padding-bottom: 0%;
+    
+    }
+    
+    .navbar-brand:hover {
+        color: #4c1b9a;
+        padding-bottom: 0%;
+    }
+    
+    .navbar-brand::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: #4c1b9a;
+        border-radius: 5px;
+        transform: scaleX(0);
+        transition: all 0.6s ease;
+        bottom: 0;
+        left: 0;
+        padding-bottom: 0px;
+    }
+    
+    .navbar-brand:hover::before {
+        transform: scaleX(1);
+        padding-bottom: 0%;
+    }
+    
+    #Logout {
+        background: rgb(68, 43, 206);
+        padding-left: 13px;
+        font-size: 20px;
+        color: white;
+        text-align: end;
+    }
+    
+    #Logout:hover {
+        background: rgb(230, 63, 63);
+        padding-left: 13px;
+        font-size: 20px;
+        color: white;
+    }
+    
+    .navbar {
+    
+        margin-bottom: 0px;
+        padding-bottom: 0%;
+        justify-content: center;
+    }
+    
+    .s {
+        text-decoration: none;
+    }
+    
+    .rainbow-text {
+        background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        /* For Safari */
+       /* background-size: 400%;
+        /* Adjust based on text length */
+       /* animation: rainbow-animation 5s infinite linear;
+        /* Adjust duration as needed */
+    }
+    
+    #Editreservation {
+        color: #4c1b9a;
+        text-decoration: underline;
+        cursor: not-allowed;
+    }
+    @media (max-width: 767px) {
+        .navbar-brand {
+          font-size: 17px; /* Decrease font size */
+        }
+      }
+      
+      /* For medium devices (e.g., tablets) */
+      @media (min-width: 768px) and (max-width: 991px) {
+        .navbar-brand {
+          font-size: 20px; /* Adjust font size */
+        }
+      }
+      
+      /* For large devices (e.g., desktops) */
+      @media (min-width: 992px) {
+        .navbar-brand {
+          font-size: 28px; /* Default font size */
+        }
+      }
+      nav{
+        background: linear-gradient(to right, #ffffff,#9DA2AE);
+      }
+      td img {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+
+<body>
+    <!-------------------------Menu Bar------------------------------------>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 sticky-top">
+        <ul>
+            <li>
+                <h1 class="rainbow-text">Roommeetee</h1>
+            </li>
+            <li><a href="/staff/room-lists" class="navbar-brand float-end" id="Roomlist">Room list</a></li>
+            <li><a href="/staff/dashboard" class="navbar-brand  float-end " id="Editreservation">Edit Reservation</a></li>
+            <li><a href="/staff/dashboard" class="navbar-brand float-end" id="Dashboard">Dashboard</a></li>
+            <li><a href="" class="navbar-brand float-end" id="History">History</a></li>
+            <li><a href="/logout" class=" navbar-brand float-end ">Logout</a></li>
+            <li><p><%= user.email %></p></li>
+        </ul>
+    </nav>
+    <div>
+    <h1>Add Room and Time Slots</h1>
+    <form method="post" action="/staff/add-room" enctype="multipart/form-data">
+        <label for="roomName">Room Name:</label>
+        <input type="text" id="roomName" name="roomName" required><br><br>
+        
+        <label for="imagePath">Image Path:</label>
+        <input type="file" id="image" name="image" accept="image/" required><br><br>
+        
+        <h2>Time Slots:</h2>
+        <div>
+            <label>Time Slot 1 (8:00:00 - 10:00:00):</label>
+            <input type="hidden" name="slotData[0][startTime]" value="08:00:00">
+            <input type="hidden" name="slotData[0][endTime]" value="10:00:00">
+            <select name="slotData[0][status]" required>
+                <option value="free">free</option>
+                <option value="disabled">disabled</option>
+            </select>
+        </div>
+        
+        <div>
+            <label>Time Slot 2 (10:00:00 - 12:00:00):</label>
+            <input type="hidden" name="slotData[1][startTime]" value="10:00:00">
+            <input type="hidden" name="slotData[1][endTime]" value="12:00:00">
+            <select name="slotData[1][status]" required>
+                <option value="free">free</option>
+                <option value="disabled">disabled</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Time Slot 3 (13:00:00 - 15:00:00):</label>
+            <input type="hidden" name="slotData[2][startTime]" value="13:00:00">
+            <input type="hidden" name="slotData[2][endTime]" value="15:00:00">
+            <select name="slotData[2][status]" required>
+                <option value="free">free</option>
+                <option value="disabled">disabled</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Time Slot 4 (15:00:00 - 17:00:00):</label>
+            <input type="hidden" name="slotData[3][startTime]" value="15:00:00">
+            <input type="hidden" name="slotData[3][endTime]" value="17:00:00">
+            <select name="slotData[3][status]" required>
+                <option value="free">free</option>
+                <option value="disabled">disabled</option>
+            </select>
+        </div>
+
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+    </body>
+</html>

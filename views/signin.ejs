@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.33/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<style>
+    #main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+        width: 100%;
+        padding: 0 10px;
+        margin-top: 0px;
+        background: url("https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        background-position: center;
+        background-size: cover;
+    }
+    
+    .lato-light {
+        font-family: "Lato", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+    
+    .wrapper {
+        width: 400px;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(3px);
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: white;
+    }
+    
+    .input-field {
+        position: relative;
+        border-bottom: 2px solid white;
+        margin: 15px 0;
+    }
+    
+    .input-field:hover {
+        border-bottom: 2px solid rgb(165, 144, 144);
+        transition: 0.15s ease;
+    }
+    
+    .input-field label {
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        transform: translateY(-40%);
+        color: white;
+        font-size: 20px;
+        pointer-events: none;
+        transition: 0.15s ease;
+    }
+    
+    .input-field input {
+        width: 100%;
+        height: 40px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 20px;
+        font-family: 'Arial', sans-serif;
+        color: rgb(255, 255, 255);
+        padding-left: 10px;
+    }
+    
+    .input-field input:focus~label,
+    .input-field input:valid~label {
+        font-size: 2rem;
+        top: 10px;
+        transform: translateY(-120%);
+        color: white;
+        font-size: 14px;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    .forget {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+    }
+    
+    #remember {
+        color: white;
+    }
+    
+    .forget label {
+        display: flex;
+        align-items: center;
+    }
+    
+    .forget label p {
+        margin-left: 8px;
+    }
+    
+    .wrapper a {
+        color: aliceblue;
+        text-decoration: none;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+    
+    .wrapper a:hover {
+        text-decoration: underline;
+        opacity: 0.8;
+    }
+    
+    
+    #button:hover {
+        background:#90279B;
+       
+        color: white;
+    }
+    #button{
+       background-color:  rgb(68, 43, 206);
+    }
+    
+    ul {
+        display: flex;
+        gap: 3rem;
+        list-style: none;
+        padding-bottom: 0%;
+    }
+    
+    .navbar-brand {
+        text-decoration: none;
+        color: black;
+        position: relative;
+        transition: all 0.3s ease;
+        padding-bottom: 0%;
+        margin-bottom: 0;
+    
+    
+    }
+    
+    .navbar {
+    
+        margin-bottom: 0px;
+        padding-bottom: 0%;
+        justify-content: center;
+    }
+    
+    .navbar-brand:hover {
+        color: #4c1b9a;
+        padding-bottom: 0%;
+    }
+    
+    .navbar-brand::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: #4c1b9a;
+        border-radius: 5px;
+        transform: scaleX(0);
+        transition: all 0.6s ease;
+        bottom: 0;
+        left: 0;
+        padding-bottom: 0px;
+    }
+    
+    .navbar-brand:hover::before {
+        transform: scaleX(1);
+        padding-bottom: 0%;
+    }
+    
+    #Register {
+        
+        padding: 7px;
+        color: white;
+        font-size: 19px;
+        margin-bottom: 0;
+        background:#8c46e3;
+        padding: 10px 10px;
+    
+    }
+    #Register:hover {
+        
+        padding: 7px;
+        color: white;
+        font-size: 19px;
+        margin-bottom: 0;
+        background: #9865cb;
+        padding: 10px 1px;
+        padding: 10px 10px;
+    
+    }
+    
+    
+    
+    .rainbow-text {
+        background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        /* For Safari */
+       /* background-size: 400%;
+        /* Adjust based on text length */
+       /* animation: rainbow-animation 5s infinite linear;
+        /* Adjust duration as needed */
+    }
+    /*
+    
+    @keyframes rainbow-animation {
+        0% {
+            background-position: 0% 50%;
+        }
+    
+        100% {
+            background-position: 100% 50%;
+        }
+    }
+    @media (max-width: 767px) {
+        .navbar-brand {
+          font-size: 17px; /* Decrease font size  
+        }
+      }
+      */
+      /* For medium devices (e.g., tablets) */
+      @media (min-width: 768px) and (max-width: 991px) {
+        .navbar-brand {
+          font-size: 20px; /* Adjust font size */
+        }
+      }
+      
+      /* For large devices (e.g., desktops) */
+      @media (min-width: 992px) {
+        .navbar-brand {
+          font-size: 23px; /* Default font size */
+        }
+      }
+       nav {background: linear-gradient(to right, #ffff,#9DA2AE);
+       }
+</style>
+
+<body>
+    <!-----------------------  Menu bar --------------------------->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 " id="sticky">
+        <ul>
+            <li>
+                <h1 class="rainbow-text">Roommeetee</h1>
+            </li>
+            <li><a href="#" class="navbar-brand float-end" id="Home">Home</a></li>
+            <li><a href="#" class="navbar-brand  float-end" id="Roomlist">Room list</a></li>
+            <li><a href="#" class="navbar-brand float-end" id="Reservation">Reservation</a></li>
+            <li><a href="#" class="navbar-brand float-end" id="CheckmyRequest">Check The Request</a></li>
+            <li><a href="#" class="navbar-brand float-end" id="History">History</a></li>
+            <li><a href="/signup" class="navbar-brand float-end" >Register</a> </li>
+        </ul>
+    </nav>
+    <!--------------main -------------->
+    <div id="main">
+        <div class="wrapper mt-0">
+            <form action="/signin" method="post">
+                <h2>Login</h2>
+                <!------------ Enter Gmail ------------ ---->
+                <div class="input-field" id="form-input">
+                    <input type="text" id="Gmail" name="email" required>
+                    <label>Enter Your E-Mail</label>
+                </div>
+                <!------------ Enter Password ---------------->
+                <div class="input-field">
+                    <input type="password" id="Password" name="password" required>
+                    <label>Enter your password</label>
+                </div>
+                <div class="forget">
+                    <div class="check-input">
+                        <!------------Remember  me-------------------->
+                        <label for="remember">
+                            <input type="checkbox" id="remember">
+                            <p>Remember me</p>
+                        </label>
+                    </div>
+                </div>
+                <!-----------------  Login button  ------------------------>
+                <button type="submit" class="btn text-white" id="button">Login</button>
+                <div class="mt-3 text-white" id="New_account">
+                    <!--------------- go to  Register page ----------------->
+                    <a href="/signup">
+                        <p>Create New Account</p>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+
+        document.querySelector('#Home').onclick = function () {     //when click  home menu
+            window.location.href = "Home-student.html";                    //go home page
+        }
+        document.querySelector('#Register').onclick = function () {     //when click  Register button                                     
+            window.location.href = "Register-student.html";                      // go rehister page
+        }
+        document.querySelector('#Roomlist').onclick = function () {      //when click  Roomlist menu                             
+            Swal.fire({                                                  // sweetalert
+                icon: "error",
+                title: "You must login First",
+                showCancelButton: false,                                 // dont show cancel button
+            });
+        }
+        document.querySelector('#Reservation').onclick = function () {     //when click  reservation menu
+            Swal.fire({                                                    // sweetalert
+                icon: "error",
+                title: "You must login First",
+                showCancelButton: false,                                   // dont show cancel button
+            });
+        }
+        document.querySelector('#CheckmyRequest').onclick = function () {     //when click  Check my Request menu
+            Swal.fire({                                                  // sweetalert
+                icon: "error",
+                title: "You must login First",
+                showCancelButton: false,                                     // dont show cancal button
+            });
+        }
+        document.querySelector('#History').onclick = function () {           //when click  history menu
+            Swal.fire({                                                       //sweetalert
+                icon: "error",
+                title: "You must login First",
+                showCancelButton: false,                                       //dont show cancel button
+            });
+        }
+        document.querySelector('#button').onclick = function () {              //when  click log in button
+            const Gmail = document.querySelector('#Gmail').value;
+            const Password = document.querySelector('#Password').value;
+            if (Gmail === "student@gmail.com" && Password === "1234") {          //when  gmail and password correct
+                Swal.fire({                                                      // sweetalert
+                    title: "Are you sure for Log-in?",
+                    showDenyButton: true,
+                    confirmButtonText: "Sure",                                    //set confirm button
+                    denyButtonText: `Cancel`                                      // set cancel button
+                }).then((result) => {
+                    if (result.isConfirmed) {                                     //if press sure button               
+                        Swal.fire({                                              // sweetalert
+                            icon: "success",
+                            title: "Log-in Success",
+                            text:" Welcome for Student",
+                            showCancelButton: false,                             // dont show cancel button
+                            confirmButtonText: "Go Booking",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "Roomlist-student.html"          //go student page
+                            }
+                        });
+                    }
+                    
+                })
+            }
+            else if(Gmail==="staff@gmail.com" &&Password==='1234'){
+                Swal.fire({                                                      // sweetalert
+                    title: "Are you sure for Log-in?",
+                    showDenyButton: true,
+                    confirmButtonText: "Sure",                                    //set confirm button
+                    denyButtonText: `Cancel`                                      // set cancel button
+                }).then((result) => {
+                    if (result.isConfirmed) {                                     //if press sure button               
+                        Swal.fire({                                              // sweetalert
+                            icon: "success",
+                            title: "Log-in Success",
+                            showCancelButton: false,                             // dont show cancel button
+                            confirmButtonText: "Go to Roomlist",
+                            text:" Welcome for Staff",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "Roomlist-staff.html"          //go staff page
+                            }
+                        });
+                    }
+                    
+                })
+                  
+            }
+            else if(Gmail==="lecturer@gmail.com" &&Password==='1234'){
+                Swal.fire({                                                      // sweetalert
+                    title: "Are you sure for Log-in?",
+                    showDenyButton: true,
+                    confirmButtonText: "Sure",                                    //set confirm button
+                    denyButtonText: `Cancel`                                      // set cancel button
+                }).then((result) => {
+                    if (result.isConfirmed) {                                     //if press sure button               
+                        Swal.fire({                                              // sweetalert
+                            icon: "success",
+                            title: "Log-in Success",
+                            showCancelButton: false,                             // dont show cancel button
+                            confirmButtonText: "Go to Roomlist",
+                            text:" Welcome for Lecturer",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "Roomlist-lecturer.html"          //go Lecturer page
+                            }
+                        });
+                    }
+                    
+                })
+                  
+            }
+
+            else {                                                      //when  gmail and password incorrect 
+                        Swal.fire({                                                      // sweetalert
+                            icon: "error",
+                            title: "Username or Password is incorrect!!",
+                            showCancelButton: false,
+                        });
+                    }
+        }
+    </script>
+</body>
+
+</html>
