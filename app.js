@@ -5,6 +5,8 @@ const bodyparser = require('body-parser');
 const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
+const Swal = require('sweetalert2');
+
 
 const app = express();
 
@@ -115,12 +117,13 @@ app.post('/signin', async (req, res) => {
   con.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
     if (error) {
       console.error('Error finding user:', error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).send('Internal server error');
     }
 
     if (results.length === 0) {
       // User not found
-      return res.status(400).json({ message: 'Email or password incorrect' });
+      // return res.status(400).json({ message: 'User not found' });
+      return res.status(404).send('User not found');
     }
 
     // Compare password
@@ -129,7 +132,8 @@ app.post('/signin', async (req, res) => {
 
     if (!passwordMatch) {
       // Password incorrect
-      return res.status(400).json({ message: 'Email or password incorrect' });
+      return res.status(400).send('Incorrect Password');
+      
     }
 
     // Set user session
@@ -144,7 +148,7 @@ app.post('/signin', async (req, res) => {
       case 'user':
         return res.redirect('/index');
       default:
-        return res.status(400).json({ message: 'Unknown user role' });
+        return res.status(400).send('Unknow User Role!');
     }
   });
 });
@@ -214,12 +218,12 @@ app.get('/booking', (req, res) => {
   con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
     if (error) {
       console.error('Error retrieving user information:', error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).send('Internal server error!');
     }
 
     // If the user is not found, send a 404 response
     if (results.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).send('User not found!');
     }
 
     // User found, extract user information
@@ -264,7 +268,8 @@ app.get('/booking', (req, res) => {
           startTime: slot[0].start_time,
           endTime: slot[0].end_time,
           slotId: slotId,
-          userId: userId
+          userId: userId,
+          user:user
         });
       });
     });
@@ -299,41 +304,53 @@ app.post('/booking', (req, res) => {
   con.query('SELECT * FROM time_slots WHERE slot_id = ? AND start_time > ? ORDER BY start_time ASC', [slotId, currentTime], (error, results) => {
     if (error) {
       console.error('Error retrieving time slots:', error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).send('Internal server error');
     }
 
     // If there are no available time slots for today, return an error
     if (results.length === 0) {
-      return res.status(400).json({ message: 'No available time slots for today' });
+      return res.status(400).send('No available time slots for today');
     }
 
     // Check if the student has already booked a slot for today
     con.query('SELECT * FROM bookings WHERE user_id = ? AND date = ?', [userId, today], (error, results) => {
       if (error) {
         console.error('Error checking existing bookings:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).send('Internal server error');
       }
 
       // If the student has already booked a slot for today, return an error
       if (results.length > 0) {
-        return res.status(400).json({ message: 'Student can only book a single slot per day' });
+        return res.status(400).send('Student can only book a single slot per day');
       }
 
       // Insert booking record into the database
       con.query('INSERT INTO bookings (user_id, room_id, slot_id, objective, date, status) VALUES (?, ?, ?, ?, ?, ?)', [userId, roomId, slotId, objective, today, 'pending'], (error, results) => {
         if (error) {
           console.error('Error creating booking:', error);
-          return res.status(500).json({ message: 'Internal server error' });
+          return res.status(500).send('Internal server error');
+
         }
 
         // Update the status of the room's time slots to "pending"
         con.query('UPDATE time_slots SET status = ? WHERE slot_id = ?', ['pending', slotId], (error, results) => {
           if (error) {
             console.error('Error updating time slot status:', error);
-            return res.status(500).json({ message: 'Internal server error' });
+            return res.status(500).send('Internal server error');
           }
 
-          return res.status(200).json({ message: 'Booking successful' });
+          // return res.status(200).json({ message: 'Booking successful' });
+              // Display success message using SweetAlert2
+            Swal.fire({
+              icon: 'success',
+              title: 'Booking Successful!',
+              text: 'Your booking has been successfully processed.',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'OK'
+            });
+
+            // Redirect to a different page after displaying the success message
+            res.redirect('/index');
         });
       });
     });
