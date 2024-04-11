@@ -246,26 +246,22 @@
     </nav>
     <div class="container">
         <section class="main">
-            <h3>Date: March 30, 2024</h3>
-            <div class="main-top">
-            <h1>Status</h1>
-          </div>
           <div class="main-status">
             <div class="card">
               <h3 class="text-success">FREE</h3>
               <h4><%= freeSlots %>/<%= totalSlots %></h4>
             </div>
             <div class="card">
-              <h3 class="text-warning">Pending</h3>
+                <h3 class="text-warning">Pending</h3>
               <h4><%= pendingSlots %>/<%= totalSlots %></h4>
             </div>
             <div class="card">
               <h3 class="text-danger">Disable</h3>
-              <h4><%= reservedSlots %>/<%= totalSlots %></h4>
+              <h4><%=  disabledSlots %>/<%= totalSlots %></h4>
             </div>
             <div class="card">
               <h3 class="text-dark">Reserve</h3>
-              <h4><%= disabledSlots %>/<%= totalSlots %></h4>
+              <h4><%= reservedSlots %>/<%= totalSlots %></h4>
             </div>
           </div>
         </section>

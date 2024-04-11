@@ -253,16 +253,17 @@
               <h4><%= freeSlots %>/<%= totalSlots %></h4>
             </div>
             <div class="card">
-              <h3 class="text-warning">Pending</h3>
+              <h3 class="text-warning">
+                <a href="/lecturer/booking-requests" style="color:rgb(255, 213, 0)">Pending</a> </h3>
               <h4><%= pendingSlots %>/<%= totalSlots %></h4>
             </div>
             <div class="card">
               <h3 class="text-danger">Disable</h3>
-              <h4><%= reservedSlots %>/<%= totalSlots %></h4>
+              <h4><%= disabledSlots %>/<%= totalSlots %></h4>
             </div>
             <div class="card">
               <h3 class="text-dark">Reserve</h3>
-              <h4><%= disabledSlots %>/<%= totalSlots %></h4>
+              <h4><%= reservedSlots %>/<%= totalSlots %></h4>
             </div>
           </div>
         </section>

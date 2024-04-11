@@ -250,81 +250,6 @@
 
     <!-- JavaScript -->
     <script>
-        var rooms = [
-            
-            {
-                id: 1,
-                name: 'Meeting room1',
-                time: '08.00-10.00',
-                Pending:'mark',
-                Objective:'Project'
-            },
-            {
-                id: 2,
-                name: 'Meeting room1',
-                time: '15.00-17.00',
-                Pending:'Jane',
-                Objective:'Project'
-            },
-            {
-                id: 3,
-                name: 'Meeting room2',
-                time: '08.00-10.00',
-                Pending:'Jade',
-                Objective:'Project'
-            },
-            {
-                id: 4,
-                name: 'Meeting room2',
-                time: '15.00-17.00',
-                Pending:'Kim',
-                Objective:'Project'
-            },
-            {
-                id: 5,
-                name: 'Meeting room3',
-                time: '08.00-10.00',
-                Pending:'Tom',
-                Objective:'Project'
-            },
-            {
-                id: 6,
-                name: 'Meeting room3',
-                time: '15.00-17.00',
-                Pending:'Pao',
-                Objective:'Project'
-            },
-            {
-                id:7 ,
-                name: 'Meeting room3',
-                time: '08.00-10.00',
-                Pending:'Nit',
-                Objective:'Project'
-            },
-            {
-                id: 8,
-                name: 'Meeting room4',
-                time: '08.00-10.00',
-                Pending:'boa',
-                Objective:'Project'
-            },
-            {
-                id: 9,
-                name: 'Meeting room4',
-                time: '08.00-10.00',
-                Pending:'Pat',
-                Objective:'Project'
-            },
-            {
-                id: 10,
-                name: 'Meeting room5',
-                time: '08.00-10.00',
-                Pending:'Ploy',
-                Objective:'Project'
-            },
-          
-           
-        ];
 
         var mode = "add";
         var editID = null; // Variable to store the index of the room being edited
@@ -456,14 +381,6 @@
         }
 
         readRooms();
-
-        // document.querySelector('#btnAdd').onclick = function () {
-        //     document.querySelector('#txtName').value = "";
-        //     document.querySelector('#txtTimeSlot').value = "";
-        //     modalAddEdit.show();
-        //     document.querySelector('#modalTitleId').innerText = "Add Room";
-        //     mode = "add";
-        // }
 
         document.querySelector('#btnAddEdit').onclick = function () {
             if (mode == "add") {

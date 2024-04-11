@@ -96,7 +96,8 @@ app.post('/signup', async (req, res) => {
           }
 
           // User registered successfully, redirect to login page
-          return res.status(200).json({ message: 'User registered successfully. Redirect to login page.' });
+          // return res.status(200).json({ message: 'User registered successfully. Redirect to login page.' });
+          return res.redirect('/');
         });
       } catch (error) {
         console.error('Error hashing password:', error);
@@ -313,7 +314,7 @@ app.post('/booking', (req, res) => {
     }
 
     // Check if the student has already booked a slot for today
-    con.query('SELECT * FROM bookings WHERE user_id = ? AND date = ?', [userId, today], (error, results) => {
+    con.query('SELECT * FROM bookings WHERE user_id = ? AND DATE = ?', [userId, today], (error, results) => {
       if (error) {
         console.error('Error checking existing bookings:', error);
         return res.status(500).send('Internal server error');
@@ -325,7 +326,7 @@ app.post('/booking', (req, res) => {
       }
 
       // Insert booking record into the database
-      con.query('INSERT INTO bookings (user_id, room_id, slot_id, objective, date, status) VALUES (?, ?, ?, ?, ?, ?)', [userId, roomId, slotId, objective, today, 'pending'], (error, results) => {
+      con.query('INSERT INTO bookings (user_id, room_id, slot_id, objective, status, action_by) VALUES (?, ?, ?, ?, ?, ?)', [userId, roomId, slotId, objective, 'pending', userId], (error, results) => {
         if (error) {
           console.error('Error creating booking:', error);
           return res.status(500).send('Internal server error');
@@ -353,6 +354,50 @@ app.post('/booking', (req, res) => {
             res.redirect('/index');
         });
       });
+    });
+  });
+});
+
+// Render user booking request page
+app.get('/user/checking-requests', (req, res) => {
+  // Check if the user is logged in
+  if (!req.session || !req.session.userId) {
+    // If the user is not logged in, redirect them to the login page
+    return res.redirect('/');
+  }
+
+  // Retrieve user information based on the session
+  const userId = req.session.userId;
+  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+    if (error) {
+      console.error('Error retrieving user information:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    // If the user is not found, send a 404 response
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // User found, extract user information
+    const user = results[0];
+
+    // Query database to get all pending booking request
+    const query = "SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, rooms.image_path " +
+      "FROM bookings " +
+      "JOIN rooms ON bookings.room_id = rooms.room_id " +
+      "JOIN time_slots ON bookings.slot_id = time_slots.slot_id " +
+      "WHERE bookings.status = 'pending'";
+
+    con.query(query, (error, bookings) => {
+      if (error) {
+        // Handle error
+        console.error('Error fecting bookings:', error);
+        return res.status(500).send('Internal Server Error');
+      }
+      // Render the lecturer dashboard with bookings data
+      res.render('user/checking_request', { user, bookings: bookings })
+
     });
   });
 });
@@ -587,7 +632,14 @@ app.post('/lecturer/approve-booking', (req, res) => {
                   console.error('Error updating slot status:', error);
                   return res.status(500).send('Internal Server Error');
               }
-              
+                 // Display success message using SweetAlert2
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Booking Successful!',
+                  text: 'Your booking has been successfully processed.',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'OK'
+                });
               // Redirect back to the dashboard or any other appropriate page
               res.redirect('/lecturer/dashboard');
           });
