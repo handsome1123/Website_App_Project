@@ -81,8 +81,10 @@ app.post('/signup', async (req, res) => {
 
       if (results.length > 0) {
         // Email already exists
+        
         return res.status(400).json({ message: 'Email already exists' });
       }
+      
 
       try {
         // Hash the password
@@ -94,6 +96,15 @@ app.post('/signup', async (req, res) => {
             console.error('Error creating new user:', error);
             return res.status(500).json({ message: 'Internal server error' });
           }
+
+            // Display success message using SweetAlert2
+            Swal.fire({
+              icon: 'success',
+              title: 'Booking Successful!',
+              text: 'Your booking has been successfully processed.',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'OK'
+            });
 
           // User registered successfully, redirect to login page
           // return res.status(200).json({ message: 'User registered successfully. Redirect to login page.' });
@@ -341,18 +352,17 @@ app.post('/booking', (req, res) => {
           }
 
           // return res.status(200).json({ message: 'Booking successful' });
-              // Display success message using SweetAlert2
-            Swal.fire({
-              icon: 'success',
-              title: 'Booking Successful!',
-              text: 'Your booking has been successfully processed.',
-              confirmButtonColor: '#3085d6',
-              confirmButtonText: 'OK'
-            });
-
             // Redirect to a different page after displaying the success message
             res.redirect('/index');
         });
+          // Display success message using SweetAlert2
+          Swal.fire({
+            icon: 'success',
+            title: 'Booking Successful!',
+            text: 'Your booking has been successfully processed.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+          });
       });
     });
   });
@@ -632,17 +642,18 @@ app.post('/lecturer/approve-booking', (req, res) => {
                   console.error('Error updating slot status:', error);
                   return res.status(500).send('Internal Server Error');
               }
-                 // Display success message using SweetAlert2
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Booking Successful!',
-                  text: 'Your booking has been successfully processed.',
-                  confirmButtonColor: '#3085d6',
-                  confirmButtonText: 'OK'
-                });
               // Redirect back to the dashboard or any other appropriate page
               res.redirect('/lecturer/dashboard');
           });
+
+            // Display success message using SweetAlert2
+            Swal.fire({
+              icon: 'success',
+              title: 'Booking Successful!',
+              text: 'Your booking has been successfully processed.',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'OK'
+            });
       });
   });
 });
