@@ -170,7 +170,7 @@
         </ul>
     </nav>
     <div class=" ">
-        <table class="table table-striped  w-100 " id="Table">
+        <table class="table table-striped table-borded  w-100 " id="Table">
             <thead>
                 <tr>
                     <th class="text-center bg-dark text-white fs-4" id="">Picture</th>
@@ -202,17 +202,13 @@
                             <% room.timeSlots.forEach(slot => { %>
                             <div class="mt-2">
                                 <% if (slot.status === "free") { %> 
-                                    <button class="btn btn-success btn-md px-3 py-2 text-center">
-                                        <a href="/booking/?roomId=<%= room.room_id %>&userId=<%= userId %>&slotId=<%= slot.slot_id %>" class="text-white px-3">
-                                          <%= slot.status %>
-                                        </a>
-                                      </button>
+                                    <button class="btn btn-primary btn-md  py-2  text-center" style="width: 200px;"><%= slot.status %></button>
                                 <% } else if (slot.status === 'pending') { %>
-                                    <button class="btn btn-secondary btn-md px-3 py-2 text-center"><%= slot.status %></button>
+                                    <button class="btn btn-secondary btn-md py-2 text-center" style="width: 200px;"><%= slot.status %></button>
                                 <% } else if (slot.status === 'reserved') { %>
-                                    <button class="btn btn-warning btn-md px-3 py-2  text-center"><%= slot.status %></button>
+                                    <button class="btn btn-warning btn-md  py-2 text-center" style="width: 200px;" ><%= slot.status %></button>
                                 <% } else if (slot.status === 'disabled') { %>
-                                    <button class="btn btn-danger btn-md px-3 py-2 text-center"><%= slot.status %></button>
+                                    <button class="btn btn-danger btn-md  py-2 text-center" style="width: 200px;"><%= slot.status %></button>
                                 <% } %>
                             </div>
                             <% }); %>   

@@ -162,8 +162,8 @@
                 <% lecturerHistory.forEach(booking => { %>
                   <tr>
                     <td><%= booking.room_name %></td>
-                    <td><%= booking.created_at.toDateString() %></td> <!-- Display date only -->
-                    <td><%= booking.created_at.toLocaleTimeString() %></td> <!-- Display time only -->
+                    <td><%= booking.booked_at.toDateString() %></td> <!-- Display date only -->
+                    <td><%= booking.booked_at.toLocaleTimeString() %></td> <!-- Display time only -->
                     <td><%= booking.start_time %> - <%= booking.end_time %></td>
                     <td><%= booking.username %></td> <!-- Assuming student_name is retrieved from the database -->
                     <td>

@@ -163,7 +163,7 @@
                 <% allLecHistory.forEach(booking => { %>
                   <tr>
                     <td><%= booking.room_name %></td>
-                  <td><%= booking.created_at.toDateString() %></td> <!--Date only-->
+                  <td><%= booking.booked_at.toDateString() %></td> <!--Date only-->
                   <td><%= booking.start_time %> - <%= booking.end_time %></td> <!--Time only-->
                   <td><%= booking.slot_id %></td>
                   <td><%= booking.student_name %></td>

@@ -153,7 +153,7 @@ app.post('/signin', async (req, res) => {
 
     // Redirect to respective dashboard based on user role
     switch (user.role) {
-      case 'admin':
+      case 'staff':
         return res.redirect('/staff/dashboard');
       case 'lecturer':
         return res.redirect('/lecturer/dashboard');
@@ -398,53 +398,54 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
 // Render user booking request page
 app.get('/user/checking-requests', (req, res) => {
   // Check if the user is logged in
-if (!req.session || !req.session.userId) {
-  // If the user is not logged in, redirect them to the login page
-  return res.redirect('/');
-}
-
-// Retrieve user information based on the session
-const userId = req.session.userId;
-con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-  if (error) {
-    console.error('Error retrieving user information:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+  if (!req.session || !req.session.userId) {
+    // If the user is not logged in, redirect them to the login page
+    return res.redirect('/');
   }
 
-  // If the user is not found, send a 404 response
-  if (results.length === 0) {
-    return res.status(404).json({ message: 'User not found' });
-  }
+  // Retrieve user information based on the session
+  const userId = req.session.userId;
+  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+    if (error) {
+      console.error('Error retrieving user information:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
 
-  // User found, extract user information
-  const user = results[0];
+    // If the user is not found, send a 404 response
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-    // Check if the user is a lecturer
-    if(user.role !== 'user') {
+    // User found, extract user information
+    const user = results[0];
+
+    // Check if the user is not a lecturer
+    if (user.role !== 'user') {
       // If the user is not a lecturer, deny access
-      // return res.status(403).send('Access forbidden');
       return res.redirect('/');
     }
 
-    // Query database to get all pending booking request
-    const query = "SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, rooms.image_path " +
-      "FROM bookings " +
-      "JOIN rooms ON bookings.room_id = rooms.room_id " +
-      "JOIN time_slots ON bookings.slot_id = time_slots.slot_id " +
-      "WHERE bookings.status = 'pending'";
+    // Query database to get pending booking requests for the specific login user ID
+    const query = `
+      SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, rooms.image_path
+      FROM bookings 
+      JOIN rooms ON bookings.room_id = rooms.room_id 
+      JOIN time_slots ON bookings.slot_id = time_slots.slot_id 
+      WHERE bookings.status = 'pending' 
+        AND bookings.user_id = ?`;
 
-    con.query(query, (error, bookings) => {
+    con.query(query, [userId], (error, bookings) => {
       if (error) {
         // Handle error
-        console.error('Error fecting bookings:', error);
+        console.error('Error fetching bookings:', error);
         return res.status(500).send('Internal Server Error');
       }
-      // Render the lecturer dashboard with bookings data
-      res.render('user/checking_request', { user, bookings: bookings })
-
+      // Render the user's booking request page with bookings data
+      res.render('user/checking_request', { user, bookings });
     });
   });
 });
+
 
 // Render user history
 app.get('/user/history', (req, res) => {
@@ -486,7 +487,8 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
   JOIN rooms ON bookings.room_id = rooms.room_id 
   JOIN time_slots ON bookings.slot_id = time_slots.slot_id 
   JOIN users ON bookings.user_id = users.user_id
-  WHERE bookings.user_id = ?`;
+  WHERE bookings.status != 'pending' 
+  AND bookings.user_id = ?`;
 
 con.query(query, [userId], (error, userHistory) => {
   if (error) {
@@ -1325,13 +1327,15 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
 
      // Query to fetch booking history for the lecturer
      const query = `
-  SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, 
-         booking_users.username AS student_name, action_users.username AS lecturer_name
-  FROM bookings 
-  JOIN rooms ON bookings.room_id = rooms.room_id 
-  JOIN time_slots ON bookings.slot_id = time_slots.slot_id 
-  JOIN users AS booking_users ON bookings.user_id = booking_users.user_id
-  LEFT JOIN users AS action_users ON bookings.action_by = action_users.user_id`;
+     SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, 
+     booking_users.username AS student_name, action_users.username AS lecturer_name
+FROM bookings 
+JOIN rooms ON bookings.room_id = rooms.room_id 
+JOIN time_slots ON bookings.slot_id = time_slots.slot_id 
+JOIN users AS booking_users ON bookings.user_id = booking_users.user_id
+LEFT JOIN users AS action_users ON bookings.action_by = action_users.user_id
+WHERE bookings.status != 'pending';
+`;
 
 
 con.query(query, [userId], (error, allLecHistory) => {
