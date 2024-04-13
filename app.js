@@ -167,27 +167,34 @@ app.post('/signin', async (req, res) => {
 
 // Render user dashboard
 app.get('/index', (req, res) => {
-  // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-    // If the user is not logged in, redirect them to the login page
-    return res.redirect('/');
+// Check if the user is logged in
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
-  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-    if (error) {
-      console.error('Error retrieving user information:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    // If the user is not found, send a 404 response
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+  // User found, extract user information
+  const user = results[0];
 
-    // User found, extract user information
-    const user = results[0];
+    // Check if the user is a lecturer
+    if(user.role !== 'user') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
 
     // Query to fetch rooms
     const roomsQuery = 'SELECT *, CONCAT("/img/", image_path) AS image_path FROM rooms';
@@ -219,27 +226,34 @@ app.get('/index', (req, res) => {
 
 // Render user booking form
 app.get('/booking', (req, res) => {
-  // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-    // If the user is not logged in, redirect them to the login page
-    return res.redirect('/');
+// Check if the user is logged in
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
-  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-    if (error) {
-      console.error('Error retrieving user information:', error);
-      return res.status(500).send('Internal server error!');
-    }
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    // If the user is not found, send a 404 response
-    if (results.length === 0) {
-      return res.status(404).send('User not found!');
-    }
+  // User found, extract user information
+  const user = results[0];
 
-    // User found, extract user information
-    const user = results[0];
+    // Check if the user is a lecturer
+    if(user.role !== 'user') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
 
     // Retrieve roomId and slotId from query parameters
     const { roomId, slotId } = req.query;
@@ -291,13 +305,33 @@ app.get('/booking', (req, res) => {
 // Route for booking a time slot
 app.post('/booking', (req, res) => {
   // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-    // If the user is not logged in, redirect them to the login page
-    return res.redirect('/');
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // User found, extract user information
+  const user = results[0];
+
+    // Check if the user is a lecturer
+    if(user.role !== 'user') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
 
   // Retrieve data from the request body
   const { roomId, slotId, objective } = req.body;
@@ -325,7 +359,7 @@ app.post('/booking', (req, res) => {
     }
 
     // Check if the student has already booked a slot for today
-    con.query('SELECT * FROM bookings WHERE user_id = ? AND DATE = ?', [userId, today], (error, results) => {
+    con.query('SELECT * FROM bookings WHERE user_id = ? AND date = ?', [userId, today], (error, results) => {
       if (error) {
         console.error('Error checking existing bookings:', error);
         return res.status(500).send('Internal server error');
@@ -337,7 +371,7 @@ app.post('/booking', (req, res) => {
       }
 
       // Insert booking record into the database
-      con.query('INSERT INTO bookings (user_id, room_id, slot_id, objective, status, action_by) VALUES (?, ?, ?, ?, ?, ?)', [userId, roomId, slotId, objective, 'pending', userId], (error, results) => {
+      con.query('INSERT INTO bookings (user_id, room_id, slot_id, objective, status, action_by, date) VALUES (?, ?, ?, ?, ?, ?, ?)', [userId, roomId, slotId, objective, 'pending', userId, today], (error, results) => {
         if (error) {
           console.error('Error creating booking:', error);
           return res.status(500).send('Internal server error');
@@ -355,42 +389,42 @@ app.post('/booking', (req, res) => {
             // Redirect to a different page after displaying the success message
             res.redirect('/index');
         });
-          // Display success message using SweetAlert2
-          Swal.fire({
-            icon: 'success',
-            title: 'Booking Successful!',
-            text: 'Your booking has been successfully processed.',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-          });
       });
     });
   });
+});
 });
 
 // Render user booking request page
 app.get('/user/checking-requests', (req, res) => {
   // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-    // If the user is not logged in, redirect them to the login page
-    return res.redirect('/');
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
-  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-    if (error) {
-      console.error('Error retrieving user information:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    // If the user is not found, send a 404 response
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+  // User found, extract user information
+  const user = results[0];
 
-    // User found, extract user information
-    const user = results[0];
+    // Check if the user is a lecturer
+    if(user.role !== 'user') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
 
     // Query database to get all pending booking request
     const query = "SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, rooms.image_path " +
@@ -415,26 +449,35 @@ app.get('/user/checking-requests', (req, res) => {
 // Render user history
 app.get('/user/history', (req, res) => {
   // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-    // If the user is not logged in, redirect them to the login page
-    return res.redirect('/');
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
-  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-    if (error) {
-      console.error('Error retrieving user information:', error);
-      return res.status(500).json({ message: 'Internal server error' });
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // User found, extract user information
+  const user = results[0];
+
+    // Check if the user is a lecturer
+    if(user.role !== 'user') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
     }
 
-    // If the user is not found, send a 404 response
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
 
-    // User found, extract user information
-    const user = results[0];
 
      // Query to fetch booking history for the lecturer
   const query = `
@@ -482,6 +525,13 @@ app.get('/lecturer/dashboard', (req, res) => {
     // User found, extract user information
     const user = results[0];
 
+    // Check if the user is a lecturer
+    if(user.role !== 'lecturer') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
+
     // Query database to get counts for different slot and room statuses
     const query = `
     SELECT 
@@ -528,6 +578,13 @@ app.get('/lecturer/room-lists', (req, res) => {
 
     // User found, extract user information
     const user = results[0];
+
+      // Check if the user is a lecturer
+      if(user.role !== 'lecturer') {
+        // If the user is not a lecturer, deny access
+        // return res.status(403).send('Access forbidden');
+        return res.redirect('/');
+      }
 
     // Query to fetch rooms
     const roomsQuery = 'SELECT *, CONCAT("/img/", image_path) AS image_path FROM rooms';
@@ -581,6 +638,13 @@ app.get('/lecturer/booking-requests', (req, res) => {
     // User found, extract user information
     const user = results[0];
 
+    // Check if the user is a lecturer
+    if(user.role !== 'lecturer') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
+
     // Query database to get all pending booking request
     const query = "SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, rooms.image_path " +
       "FROM bookings " +
@@ -626,6 +690,13 @@ app.post('/lecturer/approve-booking', (req, res) => {
 
       // User found, extract user information
       const user = results[0];
+
+      // Check if the user is a lecturer
+      if(user.role !== 'lecturer') {
+        // If the user is not a lecturer, deny access
+        // return res.status(403).send('Access forbidden');
+        return res.redirect('/');
+      }
 
       // Update booking status to 'approved' and set action_by to the current user ID
       const updateBookingQuery = 'UPDATE bookings SET status = ?, action_by = ? WHERE id = ?';
@@ -684,6 +755,13 @@ app.post('/lecturer/reject-booking', (req, res) => {
       // User found, extract user information
       const user = results[0];
 
+      // Check if the user is a lecturer
+      if(user.role !== 'lecturer') {
+        // If the user is not a lecturer, deny access
+        // return res.status(403).send('Access forbidden');
+        return res.redirect('/');
+      }
+
       // Update booking status to 'approved' and set action_by to the current user ID
       const updateBookingQuery = 'UPDATE bookings SET status = ?, action_by = ? WHERE id = ?';
       con.query(updateBookingQuery, ['rejected', userId, bookingId], (err, result) => {
@@ -732,6 +810,13 @@ app.get('/lecturer/history', (req, res) => {
     // User found, extract user information
     const user = results[0];
 
+    // Check if the user is a lecturer
+    if(user.role !== 'lecturer') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
+
      // Query to fetch booking history for the lecturer
   const query = `
   SELECT bookings.*, rooms.room_name, time_slots.start_time, time_slots.end_time, users.username
@@ -777,6 +862,13 @@ app.get('/staff/dashboard', (req, res) => {
 
     // User found, extract user information
     const user = results[0];
+
+      // Check if the user is a lecturer
+      if(user.role !== 'staff') {
+        // If the user is not a lecturer, deny access
+        // return res.status(403).send('Access forbidden');
+        return res.redirect('/');
+      }
 
     // Query database to get counts for different slot and room statuses
     const query = `
@@ -826,6 +918,36 @@ app.get('/staff/room-lists', (req, res) => {
     // User found, extract user information
     const user = results[0];
 
+      // Check if the user is a lecturer
+      if(user.role !== 'staff') {
+        // If the user is not a lecturer, deny access
+        // return res.status(403).send('Access forbidden');
+        return res.redirect('/');
+      }
+
+  // Retrieve user information based on the session
+  const userId = req.session.userId;
+  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+    if (error) {
+      console.error('Error retrieving user information:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    // If the user is not found, send a 404 response
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // User found, extract user information
+    const user = results[0];
+
+  // Check if the user is a lecturer
+  if(user.role !== 'staff') {
+    // If the user is not a lecturer, deny access
+    // return res.status(403).send('Access forbidden');
+    return res.redirect('/');
+  }
+
     // Query to fetch rooms
     const roomsQuery = 'SELECT *, CONCAT("/img/", image_path) AS image_path FROM rooms';
     con.query(roomsQuery, (error, rooms) => {
@@ -853,9 +975,39 @@ app.get('/staff/room-lists', (req, res) => {
     });
   });
 });
+});
 
 //route handler for /staff/disabled-slots
 app.get('/staff/disabled-slots', (req, res) => {
+  // Check if the user is logged in
+  if (!req.session || !req.session.userId) {
+    // If the user is not logged in, redirect them to the login page
+    return res.redirect('/');
+  }
+
+  // Retrieve user information based on the session
+  const userId = req.session.userId;
+  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+    if (error) {
+      console.error('Error retrieving user information:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    // If the user is not found, send a 404 response
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // User found, extract user information
+    const user = results[0];
+
+      // Check if the user is a lecturer
+      if(user.role !== 'staff') {
+        // If the user is not a lecturer, deny access
+        // return res.status(403).send('Access forbidden');
+        return res.redirect('/');
+      }
+
   // Retrieve query parameters from the request
   const { roomId, userId, slotId } = req.query;
 
@@ -935,6 +1087,7 @@ app.get('/staff/add-room', (req, res) => {
     res.render('staff/staff_addroom', {user});
 });
 });
+});
 
 //POST route handler for processing room and time slot addition
 app.post('/staff/add-room', upload.single('image'), (req,res) => {
@@ -994,27 +1147,34 @@ app.post('/staff/add-room', upload.single('image'), (req,res) => {
 
 // GET route handler for fetching room details for editing
 app.get('/staff/edit-room/:roomId', (req, res) => {
-  // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-    // If the user is not logged in, redirect them to the login page
-    return res.redirect('/');
+// Check if the user is logged in
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
-  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-    if (error) {
-      console.error('Error retrieving user information:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    // If the user is not found, send a 404 response
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+  // User found, extract user information
+  const user = results[0];
 
-    // User found, extract user information
-    const user = results[0];
+    // Check if the user is a lecturer
+    if(user.role !== 'staff') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
 
     // Retrieve room details based on the roomId parameter
     const roomId = req.params.roomId;
@@ -1051,27 +1211,34 @@ app.get('/staff/edit-room/:roomId', (req, res) => {
 
 // POST route handler for updating room details and time slots
 app.post('/staff/edit-room/:roomId', upload.single('image'), (req, res) => {
-  // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-      // If the user is not logged in, redirect them to the login page
-      return res.redirect('/');
+// Check if the user is logged in
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
-  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-      if (error) {
-          console.error('Error retrieving user information:', error);
-          return res.status(500).json({ message: 'Internal server error' });
-      }
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-      // If the user is not found, send a 404 response
-      if (results.length === 0) {
-          return res.status(404).json({ message: 'User not found' });
-      }
+  // User found, extract user information
+  const user = results[0];
 
-      // User found, extract user information
-      const user = results[0];
+    // Check if the user is a lecturer
+    if(user.role !== 'staff') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
 
       // Extract room and time slot data from the form submission
       const { roomName, timeSlots } = req.body;
@@ -1127,27 +1294,34 @@ app.post('/staff/edit-room/:roomId', upload.single('image'), (req, res) => {
 
 // Render all lecturer history
 app.get('/staff/all-lecturers-history', (req, res) => {
-  // Check if the user is logged in
-  if (!req.session || !req.session.userId) {
-    // If the user is not logged in, redirect them to the login page
-    return res.redirect('/');
+// Check if the user is logged in
+if (!req.session || !req.session.userId) {
+  // If the user is not logged in, redirect them to the login page
+  return res.redirect('/');
+}
+
+// Retrieve user information based on the session
+const userId = req.session.userId;
+con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+  if (error) {
+    console.error('Error retrieving user information:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 
-  // Retrieve user information based on the session
-  const userId = req.session.userId;
-  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-    if (error) {
-      console.error('Error retrieving user information:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+  // If the user is not found, send a 404 response
+  if (results.length === 0) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
-    // If the user is not found, send a 404 response
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+  // User found, extract user information
+  const user = results[0];
 
-    // User found, extract user information
-    const user = results[0];
+    // Check if the user is a lecturer
+    if(user.role !== 'staff') {
+      // If the user is not a lecturer, deny access
+      // return res.status(403).send('Access forbidden');
+      return res.redirect('/');
+    }
 
      // Query to fetch booking history for the lecturer
      const query = `
