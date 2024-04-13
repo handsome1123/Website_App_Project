@@ -1,0 +1,83 @@
+/* Navbar styling */
+.navbar {
+    background-color: #343a40; /* Dark background color */
+  }
+  
+  .navbar-brand h1 {
+    font-family: 'Arial Black', sans-serif; /* Font family for the navbar brand */
+  }
+  
+  .navbar-toggler-icon {
+    background-color: #ffffff; /* Color for the navbar toggler icon */
+  }
+  
+  .navbar-nav .nav-link {
+    color: #ffffff; /* Text color for navbar links */
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #eeeeee; /* Hover text color for navbar links */
+  }
+  
+  .navbar-text {
+    color: #ffffff; /* Text color for additional navbar text */
+  }
+  
+  .navbar-text .mr-3 {
+    color: #ffffff; /* Text color for user email */
+  }
+  
+  /* Adjustments for the search bar */
+.search-bar {
+    margin-top: 20px;
+  }
+  
+  /* Styling for the input field */
+  .search-bar input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Styling for the search button */
+  .search-bar button {
+    padding: 10px 20px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Hover effect for the search button */
+  .search-bar button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  
+  
+
+  /* Responsive table styling */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Optional: You can customize table styles here */
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    color: #212529;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+  }
+  
