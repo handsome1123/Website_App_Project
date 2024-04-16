@@ -5,19 +5,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Edit Room</title>
+    <link rel="stylesheet" href="../../css/staff-style.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <script src="../../js/jquery-3.2.1.slim.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/sweetalert2.all.min.js"></script>
 </head>
 <body>
+    <div class="header">
+        <h2  class="rainbow-text">ROOMMEETEE</h2>
+    </div>
+
+    <div class="sidebar">
+        <div class="text-center mt-4">
+            <p class="text-success">[<%= user.email %>]<p></p>
+        </div>
+        <a href="/staff/dashboard">Dashboard</a>
+        <a  href="/staff/room-lists" id="Roomlist">Room List</a>
+        <a href="/staff/all-lecturers-history">History</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="content">
     <h1>Edit Room</h1>
     <h2>Room Details</h2>
     <!-- Inside your edit-room.ejs -->
     <form method="post" action="/staff/edit-room/<%= room.room_id %>" enctype="multipart/form-data">
         <!-- Room Name and Image Input Fields -->
-        <label for="roomName">Room Name:</label>
+        <label for="roomName">Room Name:</label><br>
         <input type="text" id="roomName" name="roomName" value="<%= room.room_name %>" required><br><br>
         
-        <label for="image">Current Image:</label>
-        <img src="/img/<%= room.image_path %>" alt="Room Image" style="max-width: 200px;"><br>
-        <label for="image">New Image (optional):</label>
+        <label for="image">Current Image:</label><br>
+        <img src="/img/<%= room.image_path %>" alt="Room Image" style="max-width: 200px;"><br><br>
+        <label for="image">New Image (optional):</label><br>
         <input type="file" id="image" name="image" accept="image/*"><br><br>
 
         <!-- Time Slots -->
@@ -37,9 +57,8 @@
                 </select>
             </div>
         <% }); %>
-
-        <input type="submit" value="Update">
+        <input type="submit" class="btn btn-primary" value="Update">
     </form>
-
+</div>
 </body>
 </html>

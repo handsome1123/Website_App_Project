@@ -159,8 +159,8 @@
         <div class="text-center mt-4">
             <p class="text-success">[<%= user.email %>]<p></p>
         </div>
-        <a class="active" href="/staff/dashboard">Dashboard</a>
-        <a href="/staff/room-lists" id="Roomlist">Room List</a>
+        <a href="/staff/dashboard">Dashboard</a>
+        <a  href="/staff/room-lists" id="Roomlist">Room List</a>
         <a href="/staff/all-lecturers-history">History</a>
         <a href="/logout">Logout</a>
     </div>
@@ -235,7 +235,7 @@
 
                     <td class="border-0">
                         <div class="mt-2">
-                            <button type="button" class="btn btn-warning" onclick="openEditModal('<%= room.room_id %>')">Edit</button>                        
+                            <a href="/staff/edit-room/<%= room.room_id %>" class="btn btn-warning">Edit</a>                    
                         </div>
                     </td>
                 </tr>
@@ -243,7 +243,6 @@
             </tbody>
         </table>
     </div>
-
 
     <!-- Add Modal -->
     <div class="modal fade" id="modalAdd" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
@@ -317,86 +316,7 @@
             </div>
         </div>
     </div>
-    
-    <!-- Edit Modal -->
-    <div class="modal fade" id="modalEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-l" role="document">
-            <div class="modal-content table1 pb-0">
-                <div class="modal-header rounded-pill m-4 mb-0">
-                    <h5 class="modal-title textc1" id="modalTitleId">
-                        Edit Room
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- modal-body -->
-                    <form action="/staff/edit-room" method="post" enctype="multipart/form-data" id="formEdit" class="container">
-                        <label for="roomName">Room Name</label>
-                        <input class="form-control rounded-pill" type="text" name="roomName" id="roomName" placeholder="Room Name" required> <br>
 
-                        <label for="imagePath">Choose images</label>
-                        <input type="file" id="image" name="image" accept="image/" required> <br><br>
-
-                        <h5>Time Slots:</h5>
-                        <div>
-                            <label>Time Slot 1 (08:00:00 - 10:00:00):</label>
-                            <input type="hidden" name="slotData[0][startTime]" value="08:00:00">
-                            <input type="hidden" name="slotData[0][endTime]" value="10:00:00">
-                            <select name="slotData[0][status]" required>
-                                <option value="free">free</option>
-                                <option value="disabled">disabled</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Time Slot 2 (10:00:00 - 12:00:00):</label>
-                            <input type="hidden" name="slotData[1][startTime]" value="10:00:00">
-                            <input type="hidden" name="slotData[1][endTime]" value="12:00:00">
-                            <select name="slotData[1][status]" required>
-                                <option value="free">free</option>
-                                <option value="disabled">disabled</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Time Slot 3 (13:00:00 - 15:00:00):</label>
-                            <input type="hidden" name="slotData[2][startTime]" value="13:00:00">
-                            <input type="hidden" name="slotData[2][endTime]" value="15:00:00">
-                            <select name="slotData[2][status]" required>
-                                <option value="free">free</option>
-                                <option value="disabled">disabled</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Time Slot 4 (15:00:00 - 17:00:00):</label>
-                            <input type="hidden" name="slotData[3][startTime]" value="15:00:00">
-                            <input type="hidden" name="slotData[3][endTime]" value="17:00:00">
-                            <select name="slotData[3][status]" required>
-                                <option value="free">free</option>
-                                <option value="disabled">disabled</option>
-                            </select>
-                        </div>
-
-                        <div class="text-end mt-2 me-2">
-                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="submit" class="btn btn-primary rounded-pill">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function openEditModal(roomId) {
-            // Set the room ID in the form action URL
-            document.getElementById('formEdit').action = "/staff/edit-room/" + roomId;
-            
-            // Open the modal
-            var modal = new bootstrap.Modal(document.getElementById('modalEdit'));
-            modal.show();
-        }
-    </script>
 </body>
 
 
