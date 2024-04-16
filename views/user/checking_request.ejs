@@ -4,121 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Checking Requests</title>
+    <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <script src="../../js/bootstrap.bundle.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.33/dist/sweetalert2.all.min.js"></script>
+    <script src="../../js/jquery-3.2.1.slim.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/sweetalert2.all.min.js"></script>
 </head>
 
     <style>
-        .lato-light {
-            font-family: 'Arial', sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
+
         
-        .navbar {
-            padding-bottom: 0;
-        }
-        
-        ul {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-            padding-bottom: 0%;
-        }
-        
-        .navbar {
-            padding-bottom: 0px;
-        }
-        
-        .nav {
-            justify-content: center;
-        }
-        
-        .navbar-brand {
-            text-decoration: none;
-            color: black;
-            
-            position: relative;
-            transition: all 0.3s ease;
-            padding-bottom: 0%;
-        
-        }
-        
-        .navbar-brand:hover {
-            color: #4c1b9a;
-            padding-bottom: 0%;
-        }
-        
-        .navbar-brand::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: #4c1b9a;
-            border-radius: 5px;
-            transform: scaleX(0);
-            transition: all 0.6s ease;
-            bottom: 0;
-            left: 0;
-            padding-bottom: 0px;
-        }
-        
-        .navbar-brand:hover::before {
-            transform: scaleX(1);
-            padding-bottom: 0%;
-        }
-        
-        #Logout {
-            background: rgb(68, 43, 206);
-            padding-left: 13px;
-            font-size: 20px;
-            color: white;
-            text-align: end;
-        }
-        
-        #Logout:hover {
-            background: rgb(230, 63, 63);
-            padding-left: 13px;
-            font-size: 20px;
-            color: white;
-        }
-        
-        .navbar {
-        
-            margin-bottom: 0px;
-            padding-bottom: 0%;
-            justify-content: center;
-        }
-        
-        .s {
-            text-decoration: none;
-        }
-        
-        .rainbow-text {
-        
-            background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            /* For Safari */
-            background-size: 400%;
-            /* Adjust based on text length */
-            animation: rainbow-animation 5s infinite linear;
-            /* Adjust duration as needed */
-        }
-        
-        @keyframes rainbow-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-        
-            100% {
-                background-position: 100% 50%;
-            }
-        }
+
         
         #Editreservation {
             color: #4c1b9a;
@@ -144,9 +41,6 @@
               font-size: 28px; /* Default font size */
             }
           }
-          nav{
-            background: linear-gradient(to right, #ffffff,#9DA2AE);
-          }
           @media (max-width: 767px) {
             .navbar-brand {
                 font-size: 17px;
@@ -169,29 +63,42 @@
                 /* Default font size */
             }
         }
-          nav{
-            background: linear-gradient(to right, #ffffff,#9DA2AE);
-          }
           #History{
             text-align: center;
           }
     </style>
 
 <body>
-    <!-------------------------Menu Bar------------------------------------>
-     <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 sticky-top text">
-        <ul>
-             <li><a href="Home2-student.html" class="s">
-                    <h1 class="rainbow-text">Roommeetee</h1>
-                </a>
-            </li>
-            <li><a href="/index" class="navbar-brand  float-end " id="Roomlist">Room list</a></li>
-            <li><a href="/user/checking-requests" class="navbar-brand float-end" id="CheckmyRequest">Checking Request</a></li>
-            <li><a href="/user/history" class="navbar-brand float-end" id="History">History</a></li>
-            <li><a href="/logout" class="navbar-brand float-end">Logout</a></li>
-            <li><p><%= user.email %></p></li>
-        </ul>
+     <!-------------------------Menu Bar------------------------------------>
+     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+          <a class="navbar-brand rainbow-text" href="#"><h3>ROOMMEETEE</h3></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="/index" class="nav-link">ROOM LISTS</a>
+              </li>
+              <li class="nav-item">
+                <a href="/user/checking-requests" class="nav-link">CHECK REQUEST</a>
+              </li>
+              <li class="nav-item">
+                <a href="/user/history" class="nav-link">HISTORY</a>
+              </li>
+              <li class="nav-item">
+                <a href="/logout" class="nav-link">LOGOUT</a>
+              </li>
+            </ul>
+            <span class="navbar-text">
+              <span class="mr-3"><%= user.email %></span>
+            </span>
+          </div>
+        </div>
     </nav>
+
     <table class="table table-striped  w-100 " id="Table">
         <thead>
             <tr>

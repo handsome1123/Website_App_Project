@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+}
+
+.header {
+  background-color: #08d3f2;
+  color: white;
+  text-align: center;
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure header stays above other content */
+}
+
+#header2 {
+  padding: 16px 0;
+  position: fixed; /* Change from sticky to fixed */
+  top: 50px;
+  z-index: 1000; /* Ensure header stays above other content */
+}
+
+
+@keyframes rainbow-animation {
+  0% {
+      background-position: 0% 50%;
+  }
+
+  100% {
+      background-position: 100% 50%;
+  }
+}
+
+.rainbow-text {
+      
+  background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* For Safari */
+  background-size: 400%;
+  /* Adjust based on text length */
+  animation: rainbow-animation 5s infinite linear;
+  /* Adjust duration as needed */
+}
+
+.sidebar {
+  margin-top: 10px;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  top: 64px; /* Adjust to match header height */
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+ 
+.sidebar a.active {
+  background-color:#555;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+  margin-top: 10px; /* Adjust to match header height */
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0; margin-top: 0;}
+}
+
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+}

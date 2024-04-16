@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Room Lists</title>
+    <link rel="stylesheet" href="../../css/staff-style.css">
     <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <script src="../../js/bootstrap.bundle.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="../../js/jquery-3.2.1.slim.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/sweetalert2.all.min.js"></script>
 
 </head>
@@ -144,25 +145,25 @@
 </style>
 
 <body>
-    <!-------------------------Menu Bar------------------------------------>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 sticky-top">
-        <ul>
-            <li>
-                <h1 class="rainbow-text">Roommeetee</h1>
-            </li>
-            <li><a href="/staff/room-lists" class="navbar-brand float-end" id="Roomlist">Room list</a></li>
-            <li><a href="/staff/dashboard" class="navbar-brand float-end" id="Dashboard">Dashboard</a></li>
-            <li><a href="" class="navbar-brand float-end" id="History">History</a></li>
-            <li><a href="/logout" class=" navbar-brand float-end ">Logout</a></li>
-            <li><p><%= user.email %></p></li>
-        </ul>
-    </nav>
-
-    <div>
-        <button class="btn btn-success m-3 text-end "><a href="/staff/add-room" class="text-white">Add Room</a></button>
+    <div class="header">
+        <h2  class="rainbow-text">ROOMMEETEE</h2>
     </div>
 
-    <div>
+    <div class="col  d-flex justify-content-end align-items-start mt-3" id="header2">
+        <button class="btn btn-primary" type="button">
+            <a href="/staff/add-room" class="text-white">Add Room</a>
+        </button>
+    </div>
+
+    <div class="sidebar">
+        <p class="m-3 bordered text-success">[<%= user.email %>]<p>
+        <a class="" href="/staff/dashboard">Dashboard</a>
+        <a href="/staff/room-lists" id="Roomlist">Room List</a>
+        <a href="/staff/all-lecturers-history">History</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="content">
         <table class="table table-striped table-bordered  w-100 " id="Table">
             <thead class="table-dark" >
                 <tr>
@@ -181,14 +182,14 @@
                     </td>
                     <td class="text-white mx-4 text-center" id="Table2">
                         <div class="text-start text-dark"> 
-                            <h3><%= room.room_name %></h3>
+                            <h4><%= room.room_name %></h4>
                         </div>
                     </td>
              
                     <td class="border-0" id="Table3">
                         <div class="mt-2">
                             <% room.timeSlots.forEach(slot => { %>
-                            <h5 class=" border-2 px-3 py-2"><%= slot.start_time %> - <%= slot.end_time %></h5>
+                            <p class=" border-2 px-3 py-2"><%= slot.start_time %> - <%= slot.end_time %></p>
                             <% }); %>
                         </div>
                     </td>

@@ -1,12 +1,17 @@
 /* Navbar styling */
 .navbar {
-    background-color: #343a40; /* Dark background color */
+    background-color: #e8b202; /* Dark background color */
   }
   
-  .navbar-brand h1 {
+  .navbar-brand h3 {
     font-family: 'Arial Black', sans-serif; /* Font family for the navbar brand */
   }
   
+  .nav-link {
+    font-size: 20px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  }
+
   .navbar-toggler-icon {
     background-color: #ffffff; /* Color for the navbar toggler icon */
   }
@@ -26,6 +31,30 @@
   .navbar-text .mr-3 {
     color: #ffffff; /* Text color for user email */
   }
+
+  @keyframes rainbow-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+  }
+  
+  .rainbow-text {
+        
+    background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* For Safari */
+    background-size: 400%;
+    /* Adjust based on text length */
+    animation: rainbow-animation 5s infinite linear;
+    /* Adjust duration as needed */
+  }
+
+
   
   /* Adjustments for the search bar */
 .search-bar {
@@ -60,24 +89,5 @@
   
   
 
-  /* Responsive table styling */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Optional: You can customize table styles here */
-  .table {
-    width: 100%;
-    margin-bottom: 1rem;
-    background-color: transparent;
-    color: #212529;
-  }
-  
-  .table th,
-  .table td {
-    padding: 0.75rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
-  }
+
   

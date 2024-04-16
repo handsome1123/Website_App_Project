@@ -18,7 +18,7 @@
     <!-------------------------Menu Bar------------------------------------>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-          <a class="navbar-brand" href="#"><h1>ROOMMEETEE</h1></a>
+          <a class="navbar-brand" href="#"><h3>ROOMMEETEE</h3></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -74,16 +74,16 @@
             <tbody>
                 <% rooms.forEach(room => { %>
                 <tr>
-                    <td class="text-dark mx-4 text-center" id="Table1">
-                        <img src="<%= room.image_path %>" alt="" width="350px" height="200px">
+                    <td class="text-dark mx-4 text-center">
+                        <img src="<%= room.image_path %>" alt="room" width="350px" height="200px">
                     </td>
-                    <td class="text-white mx-4 text-center" id="Table2">
+                    <td class="text-white mx-4 text-center">
                         <div class="text-start text-dark"> 
                             <h3><%= room.room_name %></h3>
                         </div>
                     </td>
              
-                    <td class="border-0" id="Table3">
+                    <td class="border-0">
                         <div class="mt-2">
                             <% room.timeSlots.forEach(slot => { %>
                             <h5 class=" border-2 px-3 py-2"><%= slot.start_time %> - <%= slot.end_time %></h5>
