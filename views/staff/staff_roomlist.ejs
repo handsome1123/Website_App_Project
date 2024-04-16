@@ -11,7 +11,6 @@
     <script src="../../js/popper.min.js"></script>
     <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/sweetalert2.all.min.js"></script>
-
 </head>
 
 <style>
@@ -149,15 +148,18 @@
         <h2  class="rainbow-text">ROOMMEETEE</h2>
     </div>
 
-    <div class="col  d-flex justify-content-end align-items-start mt-3" id="header2">
-        <button class="btn btn-primary" type="button">
-            <a href="/staff/add-room" class="text-white">Add Room</a>
+    <!-- Button to trigger the modal -->
+      <div class="col  d-flex justify-content-end align-items-start m-3 sticky-top" >
+        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalAdd" >
+          Add Room
         </button>
-    </div>
+      </div>
+      
+    
 
     <div class="sidebar">
         <p class="m-3 bordered text-success">[<%= user.email %>]<p>
-        <a class="" href="/staff/dashboard">Dashboard</a>
+        <a class="active" href="/staff/dashboard">Dashboard</a>
         <a href="/staff/room-lists" id="Roomlist">Room List</a>
         <a href="/staff/all-lecturers-history">History</a>
         <a href="/logout">Logout</a>
@@ -238,66 +240,85 @@
     </div>
 
 
+    <!-- Add Modal -->
+    <div class="modal fade" id="modalAdd" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+        aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-l" role="document">
+            <div class="modal-content table1 pb-0">
+                <div class="modal-header rounded-pill m-4 mb-0">
+                    <h5 class="modal-title textc1" id="modalTitleId">
+                        Add New Room
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- modal-body -->
+                    <form action="/staff/add-room" method="post" enctype="multipart/form-data" id="formAdd" class="container" >
+                        <label for="model">Room Name</label>
+                        <input class="form-control rounded-pill" type="text" name="roomName" id="newmodel"
+                            placeholder="Model" required> <br>
+
+                        <label for="imagePath">Choose images</label>
+                        <input type="file" id="image" name="image" accept="image/" required> <br><br>
+
+                        <h5>Time Slots:</h5>
+                        <div>
+                            <label>Time Slot 1 (08:00:00 - 10:00:00):</label>
+                            <input type="hidden" name="slotData[0][startTime]" value="08:00:00">
+                            <input type="hidden" name="slotData[0][endTime]" value="10:00:00">
+                            <select name="slotData[0][status]" required>
+                                <option value="free">free</option>
+                                <option value="disabled">disabled</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Time Slot 2 (10:00:00 - 12:00:00):</label>
+                            <input type="hidden" name="slotData[1][startTime]" value="10:00:00">
+                            <input type="hidden" name="slotData[1][endTime]" value="12:00:00">
+                            <select name="slotData[1][status]" required>
+                                <option value="free">free</option>
+                                <option value="disabled">disabled</option>
+                            </select>
+                        </div>
+                
+                        <div>
+                            <label>Time Slot 3 (13:00:00 - 15:00:00):</label>
+                            <input type="hidden" name="slotData[2][startTime]" value="13:00:00">
+                            <input type="hidden" name="slotData[2][endTime]" value="15:00:00">
+                            <select name="slotData[2][status]" required>
+                                <option value="free">free</option>
+                                <option value="disabled">disabled</option>
+                            </select>
+                        </div>
+                
+                        <div>
+                            <label>Time Slot 4 (15:00:00 - 17:00:00):</label>
+                            <input type="hidden" name="slotData[3][startTime]" value="15:00:00">
+                            <input type="hidden" name="slotData[3][endTime]" value="17:00:00">
+                            <select name="slotData[3][status]" required>
+                                <option value="free">free</option>
+                                <option value="disabled">disabled</option>
+                            </select>
+                        </div>
+
+                        <div class="text-end mt-2 me-2">
+                            <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-primary rounded-pill" >Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
 
-        // Call the function to generate room rows when the page loads
-        window.onload = function () {
-            generateRoomRows();
-        };
-        
-        //   -------------when click logout -------------------------
-        document.querySelector('#Logout').onclick = function () {
-            Swal.fire({
-
-                title: "Do you want to Logout",
-                showCancelButton: true,
-                confirmButtonText: "Logout",
-
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    window.location.href = "Home-student.html"
-                } else if (result.isDenied) {
-                    Swal.fire("Changes are not saved", "", "info");
-                }
-            });
-        };
-
-        //----------when click Home menu--------------------//
-        document.querySelector('#Home').onclick = function () {
-            window.location.href = "Home2-student.html";
-        };
-        
-        //----------when click Check Request menu--------------------//
-        document.querySelector('#CheckmyRequest').onclick = function () {
-
-            window.location.href = "Checkrequest-student.html"
-
-        }
-        
-        //----------when click Reservation menu--------------------//
-        document.querySelector('#Reservation').onclick = function () {
-            Swal.fire({
-                icon: "error",
-                title: "You must choose The Room First",
-                showCancelButton: true,
-                confirmButtonText: "Booking Now",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "roomlist-student.html";
-                } else if (result.isDenied) {
-                    Swal.fire("Changes are not saved", "", "info");
-                }
-            });
-        }
-
-        //----------when click History menu--------------------//
-        document.querySelector('#History').onclick = function () {
-
-            window.location.href = "History-student.html"
-        } 
-    
     </script>
+
 </body>
 
 </html>
+

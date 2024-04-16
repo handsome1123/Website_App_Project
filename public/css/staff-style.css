@@ -13,13 +13,6 @@ body {
   z-index: 1000; /* Ensure header stays above other content */
 }
 
-#header2 {
-  padding: 16px 0;
-  position: fixed; /* Change from sticky to fixed */
-  top: 50px;
-  z-index: 1000; /* Ensure header stays above other content */
-}
-
 
 @keyframes rainbow-animation {
   0% {
