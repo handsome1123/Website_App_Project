@@ -144,8 +144,7 @@ app.post('/signin', async (req, res) => {
 
     if (!passwordMatch) {
       // Password incorrect
-      return res.status(400).send('Incorrect Password');
-      
+       return res.status(400).send('Incorrect Password');
     }
 
     // Set user session
@@ -164,6 +163,7 @@ app.post('/signin', async (req, res) => {
     }
   });
 });
+
 
 // Render user dashboard
 app.get('/index', (req, res) => {
