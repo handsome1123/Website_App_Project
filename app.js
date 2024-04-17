@@ -5,7 +5,8 @@ const bodyparser = require('body-parser');
 const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
-const Swal = require('sweetalert2');
+const flush = require('connect-flash');
+const { request } = require('http');
 
 
 const app = express();
@@ -31,6 +32,8 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+
+app.use(flush());
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -59,12 +62,12 @@ con.connect(function (err) {
 
 // render signin page
 app.get('/', (req, res) => {
-  res.render('signin');
+  res.render('signin', { message : req.flash('message')});
 });
 
 //render signup page
 app.get('/signup', (req, res) => {
-  res.render('signup');
+  res.render('signup', { message : req.flash('message')});
 });
 
 // Handle POST request for user signup
@@ -76,15 +79,15 @@ app.post('/signup', async (req, res) => {
     con.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
       if (error) {
         console.error('Error checking existing email:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        req.flash('message', 'Internal server error');
+        return res.redirect('/signup');
       }
 
       if (results.length > 0) {
         // Email already exists
-        
-        return res.status(400).json({ message: 'Email already exists' });
+        req.flash('message', 'Email already exists');
+        return res.redirect('/signup');
       }
-      
 
       try {
         // Hash the password
@@ -94,30 +97,24 @@ app.post('/signup', async (req, res) => {
         con.query('INSERT INTO users (username, password, email) VALUES (?, ?, ?)', [username, hashedPassword, email], (error, results) => {
           if (error) {
             console.error('Error creating new user:', error);
-            return res.status(500).json({ message: 'Internal server error' });
+            req.flash('message', 'Internal server error');
+            return res.redirect('/signup');
           }
 
-            // Display success message using SweetAlert2
-            Swal.fire({
-              icon: 'success',
-              title: 'Booking Successful!',
-              text: 'Your booking has been successfully processed.',
-              confirmButtonColor: '#3085d6',
-              confirmButtonText: 'OK'
-            });
-
           // User registered successfully, redirect to login page
-          // return res.status(200).json({ message: 'User registered successfully. Redirect to login page.' });
-          return res.redirect('/');
+          req.flash('message', 'User registered successfully. Please Login!');
+          return res.redirect('/signup');
         });
       } catch (error) {
         console.error('Error hashing password:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        req.flash('message', 'Internal server error');
+        return res.redirect('/signup');
       }
     });
   } catch (error) {
     console.error('Error:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    req.flash('message', 'Internal server error');
+    return res.redirect('/signup');
   }
 });
 
@@ -134,8 +131,8 @@ app.post('/signin', async (req, res) => {
 
     if (results.length === 0) {
       // User not found
-      // return res.status(400).json({ message: 'User not found' });
-      return res.status(404).send('User not found');
+      req.flash('message', 'User not found');
+      return res.redirect('/');
     }
 
     // Compare password
@@ -144,7 +141,8 @@ app.post('/signin', async (req, res) => {
 
     if (!passwordMatch) {
       // Password incorrect
-       return res.status(400).send('Incorrect Password');
+      req.flash('message', 'Incorrect Password');
+      return res.redirect('/');
     }
 
     // Set user session
@@ -159,7 +157,7 @@ app.post('/signin', async (req, res) => {
       case 'user':
         return res.redirect('/index');
       default:
-        return res.status(400).send('Unknow User Role!');
+        return res.status(400).send('Unknown User Role!');
     }
   });
 });
