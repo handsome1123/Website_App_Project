@@ -5,255 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <script src="../js/bootstrap.bundle.min.js"></script>
-    <script src="../js/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="../css/form_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 </head>
-    <style>
-        #main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 110vh;
-            width: 100%;
-            padding: 0 10px;
-            background: url("https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-            background-position: center;
-            background-size: cover;
-        }
-        
-        .wrapper {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            width: 600px;
-            ;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(7px);
-            -webkit-backdrop-filter: blur(3px);
-        }
-        
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: white;
-        }
-        
-        .input-field {
-            position: relative;
-            border-bottom: 2px solid white;
-            margin: 15px 0;
-        }
-        
-        .input-field label {
-            position: absolute;
-            top: 50%;
-            left: 0%;
-            transform: translateY(-40%);
-            color: white;
-            font-size: 20px;
-            pointer-events: none;
-            transition: 0.15s ease;
-        }
-        
-        .input-field input {
-            width: 100%;
-            height: 40px;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 20px;
-            font-family: 'Arial', sans-serif;
-            color: white;
-            padding-left: 10px;
-        }
-        
-        .input-field input:focus~label,
-        .input-field input:valid~label {
-            font-size: 2rem;
-            top: 10px;
-            transform: translateY(-120%);
-            color: white;
-            font-size: 14px;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        .forget {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-        }
-        
-        #remember {
-            color: white;
-        }
-        
-        .forget label {
-            display: flex;
-            align-items: center;
-        }
-        
-        .forget label p {
-            margin-left: 8px;
-        }
-        
-        .wrapper a {
-            color: aliceblue;
-            text-decoration: none;
-            font-size: 18px;
-            transition: all 0.3s ease;
-        }
-        
-        .wrapper a:hover {
-            text-decoration: underline;
-            opacity: 0.8;
-        }
-        
-        
-        ul {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-            padding-bottom: 0%;
-        }
-        
-        .navbar-brand {
-            text-decoration: none;
-            color: black;
-            
-            position: relative;
-            transition: all 0.3s ease;
-            padding-bottom: 0%;
-            margin-bottom: 0;
-        
-        
-        }
-        
-        .navbar {
-        
-            margin-bottom: 0px;
-            padding-bottom: 0%;
-            justify-content: center;
-        }
-        
-        .navbar-brand:hover {
-            color: #4c1b9a;
-            padding-bottom: 0%;
-        }
-        
-        .navbar-brand::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: #4c1b9a;
-            border-radius: 5px;
-            transform: scaleX(0);
-            transition: all 0.6s ease;
-            bottom: 0;
-            left: 0;
-            padding-bottom: 0px;
-        }
-        
-        .navbar-brand:hover::before {
-            transform: scaleX(1);
-            padding-bottom: 0%;
-        }
-        
-        #Register {
-            background:#8c46e3;
-            color: white;
-            font-size: 20px;
-        }
-        #Register:hover {
-            background: #9865cb;
-            color: white;
-            font-size: 20px;
-        }
-        
-        
-        
-        
-        
-        .rainbow-text {
-            background-image: linear-gradient(to right, #2B27A4,#4c1b9a,#90279B);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        @keyframes rainbow-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-        
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-        
-        .navbar-brand::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: #4c1b9a;
-            border-radius: 5px;
-            transform: scaleX(0);
-            transition: all 0.6s ease;
-            bottom: 0;
-            left: 0;
-            padding-bottom: 0px;
-        }
-        
-        .navbar-brand:hover::before {
-            transform: scaleX(1);
-            padding-bottom: 0%;
-        }
-        
-        #Login {
-            background-color: blue;
-            color: white;
-            font-size: 20px;
-        }
-        #Login:hover {
-            background-color:  rgb(68, 43, 206);
-            color: white;
-            font-size: 20px;
-        }
-        
-        
-        @media (max-width: 767px) {
-            .navbar-brand {
-              font-size: 17px; /* Decrease font size */
-            }
-          }
-          
-          /* For medium devices (e.g., tablets) */
-          @media (min-width: 768px) and (max-width: 991px) {
-            .navbar-brand {
-              font-size: 20px; /* Adjust font size */
-            }
-          }
-          
-          /* For large devices (e.g., desktops) */
-          @media (min-width: 992px) {
-            .navbar-brand {
-              font-size: 23px; /* Default font size */
-            }
-          }
-          nav{
-            background: linear-gradient(to right, #ffffff,#9DA2AE);
-          }
-    </style>
 
 <body>
       <!-------------------------  Menu bar                     ------------------------------>
@@ -264,11 +19,12 @@
             </li>
         </ul>
     </nav>
+
     <div id="main">
          <!-------------------------  Create new account      ------------------------------>
         <div class="wrapper">
             <form action="/signup" method="post">
-                <% if(message.length > 0) { %>
+                <% if(message.length > 0) {
                     <div class="alert alert-primary">
                         <%= message %>
                     </div>
@@ -305,6 +61,153 @@
             </form>
         </div>
     </div>
+    
+    <div class="container" style="width: 400px;">
+        <!-- Pills navs -->
+<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="tab-login" data-mdb-pill-init href="#pills-login" role="tab"
+        aria-controls="pills-login" aria-selected="true">Login</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="tab-register" data-mdb-pill-init href="#pills-register" role="tab"
+        aria-controls="pills-register" aria-selected="false">Register</a>
+    </li>
+  </ul>
+  <!-- Pills navs -->
+  
+  <!-- Pills content -->
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+      <form>
+        <div class="text-center mb-3">
+          <p>Sign in with:</p>
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-facebook-f"></i>
+          </button>
+  
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-google"></i>
+          </button>
+  
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-twitter"></i>
+          </button>
+  
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-github"></i>
+          </button>
+        </div>
+  
+        <p class="text-center">or:</p>
+  
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="email" id="loginName" class="form-control" />
+          <label class="form-label" for="loginName">Email or username</label>
+        </div>
+  
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="password" id="loginPassword" class="form-control" />
+          <label class="form-label" for="loginPassword">Password</label>
+        </div>
+  
+        <!-- 2 column grid layout -->
+        <div class="row mb-4">
+          <div class="col-md-6 d-flex justify-content-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-3 mb-md-0">
+              <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+              <label class="form-check-label" for="loginCheck"> Remember me </label>
+            </div>
+          </div>
+  
+          <div class="col-md-6 d-flex justify-content-center">
+            <!-- Simple link -->
+            <a href="#!">Forgot password?</a>
+          </div>
+        </div>
+  
+        <!-- Submit button -->
+        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Sign in</button>
+  
+        <!-- Register buttons -->
+        <div class="text-center">
+          <p>Not a member? <a href="#!">Register</a></p>
+        </div>
+      </form>
+    </div>
+    <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+      <form>
+        <div class="text-center mb-3">
+          <p>Sign up with:</p>
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-facebook-f"></i>
+          </button>
+  
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-google"></i>
+          </button>
+  
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-twitter"></i>
+          </button>
+  
+          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-github"></i>
+          </button>
+        </div>
+  
+        <p class="text-center">or:</p>
+  
+        <!-- Name input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="text" id="registerName" class="form-control" />
+          <label class="form-label" for="registerName">Name</label>
+        </div>
+  
+        <!-- Username input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="text" id="registerUsername" class="form-control" />
+          <label class="form-label" for="registerUsername">Username</label>
+        </div>
+  
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="email" id="registerEmail" class="form-control" />
+          <label class="form-label" for="registerEmail">Email</label>
+        </div>
+  
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="password" id="registerPassword" class="form-control" />
+          <label class="form-label" for="registerPassword">Password</label>
+        </div>
+  
+        <!-- Repeat Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="password" id="registerRepeatPassword" class="form-control" />
+          <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+        </div>
+  
+        <!-- Checkbox -->
+        <div class="form-check d-flex justify-content-center mb-4">
+          <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
+            aria-describedby="registerCheckHelpText" />
+          <label class="form-check-label" for="registerCheck">
+            I have read and agree to the terms
+          </label>
+        </div>
+  
+        <!-- Submit button -->
+        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3">Sign in</button>
+      </form>
+    </div>
+  </div>
+  <!-- Pills content -->
+    </div>
+
 </body>
 <script>
 
@@ -395,5 +298,11 @@
 
 
 </script>
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
 
 </html>

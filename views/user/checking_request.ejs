@@ -8,61 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
-<style>
-        
-        #Editreservation {
-            color: #4c1b9a;
-            text-decoration: none;
-            cursor: not-allowed;
-        }
-        @media (max-width: 767px) {
-            .navbar-brand {
-              font-size: 17px; /* Decrease font size */
-            }
-          }
-          
-          /* For medium devices (e.g., tablets) */
-          @media (min-width: 768px) and (max-width: 991px) {
-            .navbar-brand {
-              font-size: 20px; /* Adjust font size */
-            }
-          }
-          
-          /* For large devices (e.g., desktops) */
-          @media (min-width: 992px) {
-            .navbar-brand {
-              font-size: 28px; /* Default font size */
-            }
-          }
-          @media (max-width: 767px) {
-            .navbar-brand {
-                font-size: 17px;
-                /* Decrease font size */
-            }
-        }
-        
-        /* For medium devices (e.g., tablets) */
-        @media (min-width: 768px) and (max-width: 991px) {
-            .navbar-brand {
-                font-size: 20px;
-                /* Adjust font size */
-            }
-        }
-        
-        /* For large devices (e.g., desktops) */
-        @media (min-width: 992px) {
-            .navbar-brand {
-                font-size: 28px;
-                /* Default font size */
-            }
-        }
-          #History{
-            text-align: center;
-          }
-</style>
-
 <body>
-     <!-------------------------Menu Bar------------------------------------>
+     <!--------------Menu Bar-------------------->
      <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
           <a class="navbar-brand rainbow-text" href="#"><h3>ROOMMEETEE</h3></a>
@@ -92,7 +39,8 @@
         </div>
     </nav>
 
-    <table class="table table-striped  w-100 " id="Table">
+    <div class="container mt-2">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th class="text-center bg-dark text-white fs-4" id="">Picture</th>
@@ -111,13 +59,13 @@
                 </td>
                 <td class="text-white mx-4 text-center" id="Table2">
                     <div class="text-start text-dark"> 
-                        <h3><%= booking.room_name %></h3>
+                        <h4><%= booking.room_name %></h4>
                     </div>
                 </td>
                 
                 <td class="text-white mx-4 text-center" id="Table2">
                     <div class="text-start text-dark"> 
-                        <h3><%= booking.start_time %> - <%= booking.end_time %></h3>
+                        <h5><%= booking.start_time %> - <%= booking.end_time %></h5>
                     </div>
                 </td>
                 
@@ -130,185 +78,10 @@
             <% }); %>
         </tbody>
     </table>
-
-    <!-- JavaScript -->
-    <script>
-
-        var mode = "add";
-        var editID = null; // Variable to store the index of the room being edited
-        const modalAddEdit = new bootstrap.Modal(document.querySelector('#modalAddEdit'));
-
-        function readRooms() {
-    let output = '<thead class="table-dark"><tr><th>Name</th><th>Time Slot</th><th>Booking Name</th> <th>Booking Objective</th> <th>Action</th></tr></thead><tbody>';
-    rooms.forEach(function (room) {
-        output += '<tr>';
-        output += `<td>${room.name}</td>`;
-        output += `<td>${room.time}</td>`;
-        output += `<td>${room.Pending}</td>`;
-        output += `<td>${room.Objective}</td>`;
-        if (room.disabled) {
-            output += `<td><button class="btn btn-success btnEnable me-2" id=${room.id}>Enable</button>`;
-        } else {
-            output += `<td><button class="btn btn-primary btnApprove me-2" id=${room.id}>Approve</button>`;
-            output += `<button class="btn btn-danger btnDisapprove me-2" id=${room.id}>Disapprove</button>`;
-        }
-      //  output += `<button class="btn btn-primary btnEdit me-2" id=${room.id}>Edit</button></td>`;
-        output += '</tr>';
-    });
-    output += '</tbody>';
-
-    document.querySelector('table').innerHTML = output;
-}
-
-        function disableRoom(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Sure to disable this room?',
-                showCancelButton: true,
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const roomIndex = rooms.findIndex(room => room.id == id);
-                    if (roomIndex !== -1) {
-                        rooms[roomIndex].disabled = true; // Set the room as disabled
-                        readRooms();
-                    }
-                }
-            });
-        }
-
-        function enableRoom(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Sure to enable this room?',
-                showCancelButton: true,
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const roomIndex = rooms.findIndex(room => room.id == id);
-                    if (roomIndex !== -1) {
-                        rooms[roomIndex].disabled = false; // Set the room as enabled
-                        readRooms();
-                    }
-                }
-            });
-        }
-
-        function approveRoom(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Are you sure you want to approve this room?',
-                showCancelButton: true,
-                confirmButtonText: 'Approve'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "approve Complete",
-                        showCancelButton: false,
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (roomIndex !== -1) {
-                        rooms.splice(roomIndex, 1); // Delete the room from the array
-                        readRooms();
-                    }
-                    });
-                    const roomIndex = rooms.findIndex(room => room.id == id);
-                    
-                }
-            });
-        }
-
-        function disapproveRoom(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Are you sure you want to disapprove this room?',
-                showCancelButton: true,
-                confirmButtonText: 'Disapprove'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Disapprove Complete",
-                        showCancelButton: false,
-                        confirmButtonText: "OK",
-                    }).then((result) => {
-                        if (roomIndex !== -1) {
-                        rooms.splice(roomIndex, 1); // Delete the room from the array
-                        readRooms();
-                    }
-                    });
-                    const roomIndex = rooms.findIndex(room => room.id == id);
-                    
-                }
-            });
-        }
-
-        function addRoom() {
-            const name = document.querySelector('#txtName').value;
-            const timeSlot = document.querySelector('#txtTimeSlot').value;
-            const lastID = rooms.length > 0 ? rooms[rooms.length - 1].id : 0;
-            const newRoom = { id: lastID + 1, name: name, time: timeSlot, disabled: false }; // New rooms are initially enabled
-            rooms.push(newRoom);
-            modalAddEdit.hide();
-            readRooms();
-        }
-
-        function editRoom(id) {
-            const roomIndex = rooms.findIndex(room => room.id === id);
-            const room = rooms[roomIndex];
-            room.name = document.querySelector('#txtName').value;
-            room.time = document.querySelector('#txtTimeSlot').value;
-            modalAddEdit.hide();
-            readRooms();
-        }
-
-        readRooms();
-
-        document.querySelector('#btnAddEdit').onclick = function () {
-            if (mode == "add") {
-                addRoom();
-            } else {
-                editRoom(editID);
-            }
-        }
-
-        document.querySelector('table').onclick = function (e) {
-            if (e.target.classList.contains("btnDisable")) {
-                disableRoom(e.target.id);
-            } else if (e.target.classList.contains("btnEnable")) {
-                enableRoom(e.target.id);
-            } else if (e.target.classList.contains("btnApprove")) {
-                approveRoom(e.target.id);
-            } else if (e.target.classList.contains("btnDisapprove")) {
-                disapproveRoom(e.target.id);
-            } else if (e.target.classList.contains("btnEdit")) {
-                editID = parseInt(e.target.id);
-                const roomIndex = rooms.findIndex(room => room.id === editID);
-                const room = rooms[roomIndex];
-                document.querySelector('#txtName').value = room.name;
-                document.querySelector('#txtTimeSlot').value = room.time;
-                modalAddEdit.show();
-                document.querySelector('#modalTitleId').innerText = "Edit Room " + editID;
-                mode = "edit";
-            }
-        }
-
-        document.querySelector('#Logout').onclick = function () {
-            Swal.fire({
-                title: "Do You Want To Log-Out",
-                showCancelButton: true,
-                confirmButtonText: "Log-Out",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "Login.html"
-                } else if (result.isDenied) {
-                    Swal.fire("Changes are not saved", "", "info");
-                }
-            });
-        };
-    </script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    </div>
+  
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>

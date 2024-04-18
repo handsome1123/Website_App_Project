@@ -6,7 +6,6 @@ const session = require('express-session');
 const multer = require('multer');
 const path = require('path');
 const flush = require('connect-flash');
-const { request } = require('http');
 
 
 const app = express();
