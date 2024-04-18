@@ -79,14 +79,14 @@
                     </td>
                     <td class="text-white mx-4 text-center">
                         <div class="text-start text-dark"> 
-                            <h3><%= room.room_name %></h3>
+                            <h4><%= room.room_name %></h4>
                         </div>
                     </td>
              
                     <td class="border-0">
                         <div class="mt-2">
                             <% room.timeSlots.forEach(slot => { %>
-                            <h5 class=" border-2 px-3 py-2"><%= slot.start_time %> - <%= slot.end_time %></h5>
+                            <p class=" border-2 px-3 py-2"><%= slot.start_time %> - <%= slot.end_time %></p>
                             <% }); %>
                         </div>
                     </td>

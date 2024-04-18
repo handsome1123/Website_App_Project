@@ -198,6 +198,11 @@
         <div id="main">
             <div class="wrapper">
                 <h1>Reservation Form</h1>
+                <% if(message.length > 0) { %>
+                    <div class="alert alert-primary">
+                        <%= message %>
+                    </div>
+                <% } %>
                 <form action="/booking" method="post">
                 <input type="hidden" name="roomId" value="<%= roomId %>">
                 <input type="hidden" name="slotId" value="<%= slotId %>">

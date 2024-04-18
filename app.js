@@ -223,33 +223,116 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
 });
 
 // Render user booking form
+// app.get('/booking', (req, res) => {
+// // Check if the user is logged in
+// if (!req.session || !req.session.userId) {
+//   // If the user is not logged in, redirect them to the login page
+//   return res.redirect('/');
+// }
+
+// // Retrieve user information based on the session
+// const userId = req.session.userId;
+// con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+//   if (error) {
+//     console.error('Error retrieving user information:', error);
+//     return res.status(500).json({ message: 'Internal server error' });
+//   }
+
+//   // If the user is not found, send a 404 response
+//   if (results.length === 0) {
+//     return res.status(404).json({ message: 'User not found' });
+//   }
+
+//   // User found, extract user information
+//   const user = results[0];
+
+//     // Check if the user is a lecturer
+//     if(user.role !== 'user') {
+//       // If the user is not a lecturer, deny access
+//       // return res.status(403).send('Access forbidden');
+//       return res.redirect('/');
+//     }
+
+//     // Retrieve roomId and slotId from query parameters
+//     const { roomId, slotId } = req.query;
+
+//     // Assuming you fetch the room name, room picture path, start time, and end time based on roomId and slotId from your database
+//     const roomQuery = 'SELECT room_name, image_path FROM rooms WHERE room_id = ?';
+//     con.query(roomQuery, [roomId], (error, room) => {
+//       if (error) {
+//         console.error('Error fetching room details:', error);
+//         return res.status(500).send('Internal Server Error');
+//       }
+
+//       // Check if room array is empty or not
+//       if (!room || room.length === 0) {
+//         console.error('Room not found or empty');
+//         return res.status(404).send('Room not found');
+//       }
+
+//       // Assuming you fetch the start time and end time based on slotId
+//       const slotQuery = 'SELECT start_time, end_time FROM time_slots WHERE slot_id = ?';
+//       con.query(slotQuery, [slotId], (error, slot) => {
+//         if (error) {
+//           console.error('Error fetching time slot:', error);
+//           return res.status(500).send('Internal Server Error');
+//         }
+
+//         // Check if slot array is empty or not
+//         if (!slot || slot.length === 0) {
+//           console.error('Slot not found or empty');
+//           return res.status(404).send('Slot not found');
+//         }
+
+//         // Render the booking form with the provided data
+//         res.render('user/user_booking', {
+//           roomId: roomId,
+//           roomName: room[0].room_name,
+//           roomImage: room[0].image_path,
+//           startTime: slot[0].start_time,
+//           endTime: slot[0].end_time,
+//           slotId: slotId,
+//           userId: userId,
+//           user:user,
+//           message : req.flash('message')
+//         });
+//       });
+//     });
+//   });
+// });
+
 app.get('/booking', (req, res) => {
-// Check if the user is logged in
-if (!req.session || !req.session.userId) {
-  // If the user is not logged in, redirect them to the login page
-  return res.redirect('/');
-}
-
-// Retrieve user information based on the session
-const userId = req.session.userId;
-con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-  if (error) {
-    console.error('Error retrieving user information:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+  // Check if the user is logged in
+  if (!req.session || !req.session.userId) {
+    // Flash a message indicating the user needs to log in
+    req.flash('error', 'Please log in to access this page.');
+    // Redirect the user to the login page
+    return res.redirect('/');
   }
 
-  // If the user is not found, send a 404 response
-  if (results.length === 0) {
-    return res.status(404).json({ message: 'User not found' });
-  }
+  // Retrieve user information based on the session
+  const userId = req.session.userId;
+  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+    if (error) {
+      console.error('Error retrieving user information:', error);
+      // Flash a generic error message
+      req.flash('error', 'Internal server error. Please try again later.');
+      return res.status(500).json({ message: 'Internal server error' });
+    }
 
-  // User found, extract user information
-  const user = results[0];
+    // If the user is not found, send a flash message and redirect
+    if (results.length === 0) {
+      req.flash('error', 'User not found.');
+      return res.redirect('/');
+    }
+
+    // User found, extract user information
+    const user = results[0];
 
     // Check if the user is a lecturer
-    if(user.role !== 'user') {
-      // If the user is not a lecturer, deny access
-      // return res.status(403).send('Access forbidden');
+    if (user.role !== 'user') {
+      // If the user is not a lecturer, flash a message and redirect
+      req.flash('error', 'Access forbidden.');
       return res.redirect('/');
     }
 
@@ -261,13 +344,15 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
     con.query(roomQuery, [roomId], (error, room) => {
       if (error) {
         console.error('Error fetching room details:', error);
+        req.flash('error', 'Internal Server Error. Please try again later.');
         return res.status(500).send('Internal Server Error');
       }
 
       // Check if room array is empty or not
       if (!room || room.length === 0) {
         console.error('Room not found or empty');
-        return res.status(404).send('Room not found');
+        req.flash('error', 'Room not found.');
+        return res.redirect('/booking');
       }
 
       // Assuming you fetch the start time and end time based on slotId
@@ -275,13 +360,15 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
       con.query(slotQuery, [slotId], (error, slot) => {
         if (error) {
           console.error('Error fetching time slot:', error);
+          req.flash('error', 'Internal Server Error. Please try again later.');
           return res.status(500).send('Internal Server Error');
         }
 
         // Check if slot array is empty or not
         if (!slot || slot.length === 0) {
           console.error('Slot not found or empty');
-          return res.status(404).send('Slot not found');
+          req.flash('error', 'Slot not found.');
+          return res.redirect('/');
         }
 
         // Render the booking form with the provided data
@@ -293,12 +380,14 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
           endTime: slot[0].end_time,
           slotId: slotId,
           userId: userId,
-          user:user
+          user: user,
+          message : req.flash('message')
         });
       });
     });
   });
 });
+
 
 // Route for booking a time slot
 app.post('/booking', (req, res) => {
@@ -313,12 +402,14 @@ const userId = req.session.userId;
 con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
   if (error) {
     console.error('Error retrieving user information:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    // return res.status(500).json({ message: 'Internal server error' });
+    req.flash('message', 'Internal server error');
   }
 
   // If the user is not found, send a 404 response
   if (results.length === 0) {
-    return res.status(404).json({ message: 'User not found' });
+    req.flash('message', 'User not found');
+    return res.redirect('/');
   }
 
   // User found, extract user information
@@ -348,44 +439,63 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
   con.query('SELECT * FROM time_slots WHERE slot_id = ? AND start_time > ? ORDER BY start_time ASC', [slotId, currentTime], (error, results) => {
     if (error) {
       console.error('Error retrieving time slots:', error);
-      return res.status(500).send('Internal server error');
+      // return res.status(500).send('Internal server error');
+      return req.flash('message', 'Internal server error');
     }
 
     // If there are no available time slots for today, return an error
     if (results.length === 0) {
-      return res.status(400).send('No available time slots for today');
+      
+      // return res.status(400).send('No available time slots for today');
+      req.flash('message', 'No available time slots for today!');
+      // Redirect back to the booking page with query parameters
+      return res.redirect(`/booking/?roomId=${roomId}&userId=${userId}&slotId=${slotId}`);
+
     }
 
     // Check if the student has already booked a slot for today
     con.query('SELECT * FROM bookings WHERE user_id = ? AND date = ?', [userId, today], (error, results) => {
       if (error) {
         console.error('Error checking existing bookings:', error);
-        return res.status(500).send('Internal server error');
+        // return res.status(500).send('Internal server error');
+        return req.flash('message', 'Internal server error');
       }
 
       // If the student has already booked a slot for today, return an error
       if (results.length > 0) {
-        return res.status(400).send('Student can only book a single slot per day');
+        // return res.status(400).send('Student can only book a single slot per day');
+        req.flash('message', 'Student can only book a single slots per day');
+        // Redirect back to the booking page with query parameters
+        return res.redirect(`/booking/?roomId=${roomId}&userId=${userId}&slotId=${slotId}`);
+
       }
 
       // Insert booking record into the database
       con.query('INSERT INTO bookings (user_id, room_id, slot_id, objective, status, action_by, date) VALUES (?, ?, ?, ?, ?, ?, ?)', [userId, roomId, slotId, objective, 'pending', userId, today], (error, results) => {
         if (error) {
           console.error('Error creating booking:', error);
-          return res.status(500).send('Internal server error');
-
+          // return res.status(500).send('Internal server error');
+          req.flash('message', 'Internal server error');
+          // Redirect back to the booking page with query parameters
+          return res.redirect(`/booking/?roomId=${roomId}&userId=${userId}&slotId=${slotId}`);
         }
 
         // Update the status of the room's time slots to "pending"
         con.query('UPDATE time_slots SET status = ? WHERE slot_id = ?', ['pending', slotId], (error, results) => {
           if (error) {
             console.error('Error updating time slot status:', error);
-            return res.status(500).send('Internal server error');
+            // return res.status(500).send('Internal server error');
+            req.flash('message', 'Internal server error');
+            // Redirect back to the booking page with query parameters
+            return res.redirect(`/booking/?roomId=${roomId}&userId=${userId}&slotId=${slotId}`);
+
           }
 
-          // return res.status(200).json({ message: 'Booking successful' });
             // Redirect to a different page after displaying the success message
-            res.redirect('/index');
+            // res.redirect('/index');
+            
+            req.flash('message', 'Booking successful');
+            return res.redirect('/user/checking-requests');
         });
       });
     });
