@@ -150,9 +150,12 @@
 
     <!-- Button to trigger the modal -->
       <div class="col  d-flex justify-content-end align-items-start m-3 sticky-top" >
-        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalAdd" >
+        <button class="btn btn-primary mx-4" type="button" data-bs-toggle="modal" data-bs-target="#modalAdd" >
           Add Room
         </button>
+        <form id="reset-room-status-form" action="/reset-room-status" method="POST">
+            <button type="submit" class="btn btn-warning">Reset Statuses </button>
+        </form>
       </div>
 
     <div class="sidebar">

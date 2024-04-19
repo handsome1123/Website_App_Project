@@ -13,6 +13,7 @@ const app = express();
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
+
 // Define storage for the uploaded image
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -222,84 +223,6 @@ con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) =>
 });
 
 // Render user booking form
-// app.get('/booking', (req, res) => {
-// // Check if the user is logged in
-// if (!req.session || !req.session.userId) {
-//   // If the user is not logged in, redirect them to the login page
-//   return res.redirect('/');
-// }
-
-// // Retrieve user information based on the session
-// const userId = req.session.userId;
-// con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
-//   if (error) {
-//     console.error('Error retrieving user information:', error);
-//     return res.status(500).json({ message: 'Internal server error' });
-//   }
-
-//   // If the user is not found, send a 404 response
-//   if (results.length === 0) {
-//     return res.status(404).json({ message: 'User not found' });
-//   }
-
-//   // User found, extract user information
-//   const user = results[0];
-
-//     // Check if the user is a lecturer
-//     if(user.role !== 'user') {
-//       // If the user is not a lecturer, deny access
-//       // return res.status(403).send('Access forbidden');
-//       return res.redirect('/');
-//     }
-
-//     // Retrieve roomId and slotId from query parameters
-//     const { roomId, slotId } = req.query;
-
-//     // Assuming you fetch the room name, room picture path, start time, and end time based on roomId and slotId from your database
-//     const roomQuery = 'SELECT room_name, image_path FROM rooms WHERE room_id = ?';
-//     con.query(roomQuery, [roomId], (error, room) => {
-//       if (error) {
-//         console.error('Error fetching room details:', error);
-//         return res.status(500).send('Internal Server Error');
-//       }
-
-//       // Check if room array is empty or not
-//       if (!room || room.length === 0) {
-//         console.error('Room not found or empty');
-//         return res.status(404).send('Room not found');
-//       }
-
-//       // Assuming you fetch the start time and end time based on slotId
-//       const slotQuery = 'SELECT start_time, end_time FROM time_slots WHERE slot_id = ?';
-//       con.query(slotQuery, [slotId], (error, slot) => {
-//         if (error) {
-//           console.error('Error fetching time slot:', error);
-//           return res.status(500).send('Internal Server Error');
-//         }
-
-//         // Check if slot array is empty or not
-//         if (!slot || slot.length === 0) {
-//           console.error('Slot not found or empty');
-//           return res.status(404).send('Slot not found');
-//         }
-
-//         // Render the booking form with the provided data
-//         res.render('user/user_booking', {
-//           roomId: roomId,
-//           roomName: room[0].room_name,
-//           roomImage: room[0].image_path,
-//           startTime: slot[0].start_time,
-//           endTime: slot[0].end_time,
-//           slotId: slotId,
-//           userId: userId,
-//           user:user,
-//           message : req.flash('message')
-//         });
-//       });
-//     });
-//   });
-// });
-
 app.get('/booking', (req, res) => {
   // Check if the user is logged in
   if (!req.session || !req.session.userId) {
@@ -386,7 +309,6 @@ app.get('/booking', (req, res) => {
     });
   });
 });
-
 
 // Route for booking a time slot
 app.post('/booking', (req, res) => {
@@ -1450,6 +1372,49 @@ con.query(query, [userId], (error, allLecHistory) => {
   });
   });
 });
+
+// Route for staff to reset room statuses for the next day
+app.post('/reset-room-status', (req, res) => {
+  // Check if the user is logged in and is a staff member
+  if (!req.session || !req.session.userId) {
+      return res.status(403).json({ message: 'Access forbidden' });
+  }
+
+  // Retrieve user information based on the session
+  const userId = req.session.userId;
+  con.query('SELECT * FROM users WHERE user_id = ?', [userId], (error, results) => {
+      if (error) {
+          console.error('Error retrieving user information:', error);
+          return res.status(500).json({ message: 'Internal server error' });
+      }
+
+      // If the user is not found or is not a staff member, deny access
+      if (results.length === 0 || results[0].role !== 'staff') {
+          return res.status(403).json({ message: 'Access forbidden' });
+      }
+
+      // Reset room statuses for the next day for rooms with pending or reserved status
+      resetRoomStatusForNextDay();
+
+      // res.json({ message: 'Room statuses reset for the next day' });
+      res.redirect('/staff/room-lists');
+  });
+});
+
+// Function to reset room statuses for the next day for rooms with pending or reserved status
+function resetRoomStatusForNextDay() {
+  // Query to update time slot statuses for the next day
+  const updateQuery = 'UPDATE time_slots SET status = "free" WHERE status = "pending" OR status = "reserved"';
+
+  con.query(updateQuery, (error, result) => {
+      if (error) {
+          console.error('Error updating time slot statuses:', error);
+      } else {
+          console.log('Room statuses reset for the next day');
+      }
+  });
+}
+
 
 // Renderlogout
 app.get('/logout', (req, res) => {
