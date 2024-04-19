@@ -825,15 +825,6 @@ app.post('/lecturer/approve-booking', (req, res) => {
               // Redirect back to the dashboard or any other appropriate page
               res.redirect('/lecturer/dashboard');
           });
-
-            // Display success message using SweetAlert2
-            Swal.fire({
-              icon: 'success',
-              title: 'Booking Successful!',
-              text: 'Your booking has been successfully processed.',
-              confirmButtonColor: '#3085d6',
-              confirmButtonText: 'OK'
-            });
       });
   });
 });
@@ -986,7 +977,9 @@ app.get('/staff/dashboard', (req, res) => {
         (SELECT COUNT(*) FROM time_slots WHERE status = 'free') AS freeSlots,
         (SELECT COUNT(*) FROM time_slots WHERE status = 'pending') AS pendingSlots,
         (SELECT COUNT(*) FROM time_slots WHERE status = 'reserved') AS reservedSlots,
-        (SELECT COUNT(*) FROM time_slots WHERE status = 'disabled') AS disabledSlots
+        (SELECT COUNT(*) FROM time_slots WHERE status = 'disabled') AS disabledSlots,
+        (SELECT COUNT(*) FROM users WHERE role = 'user') AS totalStudents,
+        (SELECT COUNT(*) FROM users WHERE role = 'lecturer') AS totalLecturers
 `;
 
     con.query(query, (error, results) => {
@@ -995,10 +988,10 @@ app.get('/staff/dashboard', (req, res) => {
         return res.status(500).send('Internal Server Error');
       }
 
-      const { totalSlots, freeSlots, pendingSlots, reservedSlots, disabledSlots } = results[0];
+      const { totalSlots, freeSlots, pendingSlots, reservedSlots, disabledSlots, totalStudents, totalLecturers } = results[0];
 
       // Render the staff dashboard with counts
-      res.render('staff/staff_dashboard', { user, totalSlots, freeSlots, pendingSlots, reservedSlots, disabledSlots });
+      res.render('staff/staff_dashboard', { user, totalSlots, freeSlots, pendingSlots, reservedSlots, disabledSlots, totalStudents, totalLecturers });
     });
   });
 });
