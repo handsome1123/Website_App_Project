@@ -1394,13 +1394,13 @@ app.post('/reset-room-status', (req, res) => {
       }
 
       // Check the time to ensure it's past 5:00 PM
-      const now = new Date();
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
+      // const now = new Date();
+      // const currentHour = now.getHours();
+      // const currentMinute = now.getMinutes();
 
-      if (currentHour < 17 || (currentHour === 17 && currentMinute < 1)) {
-          return res.status(403).json({ message: 'Access forbidden. Room statuses can only be reset after 17:00.' });
-      }
+      // if (currentHour < 17 || (currentHour === 17 && currentMinute < 1)) {
+      //     return res.status(403).json({ message: 'Access forbidden. Room statuses can only be reset after 17:00.' });
+      // }
 
       // Reset room statuses for the next day for rooms with pending or reserved status
       resetRoomStatusForNextDay();
